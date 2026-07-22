@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Liyaro — студия разработки';
+const description = 'Создаём быстрые и надёжные цифровые продукты для бизнеса.';
+---
+
+<BaseLayout {title} {description} canonicalPath="/">
+  <header>
+    <a href="/" aria-label="Liyaro — главная">Liyaro</a>
+  </header>
+
+  <main>
+    <h1>Разрабатываем цифровые продукты</h1>
+    <p>Здесь скоро появится сайт студии Liyaro.</p>
+  </main>
+
+  <footer>
+    <p>© {new Date().getFullYear()} Liyaro</p>
+  </footer>
+</BaseLayout>

@@ -1,0 +1,14 @@
+node_modules*/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+apps/backend/prisma/*.db
+apps/backend/prisma/*.db-journal

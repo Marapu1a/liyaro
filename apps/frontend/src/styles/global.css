@@ -1,0 +1,16 @@
+@import './variables.css';
+@import './reset.css';
+
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: var(--font-family-base);
+  line-height: 1.5;
+}
+
+header,
+main,
+footer {
+  width: min(100% - (2 * var(--page-padding)), var(--content-width));
+  margin-inline: auto;
+}
