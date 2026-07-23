@@ -1,0 +1,52 @@
+---
+import Container from '../ui/Container.astro';
+---
+
+<section id="approach" class="approach" aria-labelledby="approach-title">
+  <Container>
+    <p class="section-label">Подход</p>
+    <div class="content">
+      <h2 id="approach-title">Не начинаем с готового ответа</h2>
+      <p>
+        Мы не предлагаем сайт, приложение или большую систему до того, как разобрались в задаче.
+        Иногда нужен отдельный сервис. Иногда достаточно небольшого инструмента или доработки
+        существующего проекта. Сначала нужно понять процесс и только потом выбирать решение.
+      </p>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .approach {
+    padding-block: var(--section-space);
+    background: var(--color-surface);
+  }
+
+  .section-label {
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    gap: var(--space-lg);
+    align-items: start;
+  }
+
+  .content p {
+    max-width: 36rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+
+  @media (max-width: 48rem) {
+    .content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

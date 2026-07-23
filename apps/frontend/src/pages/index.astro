@@ -1,21 +1,28 @@
 ---
+import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import Approach from '../components/home/Approach.astro';
+import ContactCta from '../components/home/ContactCta.astro';
+import Hero from '../components/home/Hero.astro';
+import Process from '../components/home/Process.astro';
+import Services from '../components/home/Services.astro';
+import TaskExamples from '../components/home/TaskExamples.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const title = 'Liyaro — студия разработки';
-const description = 'Создаём быстрые и надёжные цифровые продукты для бизнеса.';
+const title = 'Liyaro — разработка сайтов, сервисов и внутренних систем';
+const description =
+  'Помогаем разобраться в задаче, выбрать подходящее решение и поэтапно довести его до рабочего запуска.';
 ---
 
 <BaseLayout {title} {description} canonicalPath="/">
-  <header>
-    <a href="/" aria-label="Liyaro — главная">Liyaro</a>
-  </header>
-
+  <Header />
   <main>
-    <h1>Разрабатываем цифровые продукты</h1>
-    <p>Здесь скоро появится сайт студии Liyaro.</p>
+    <Hero />
+    <Approach />
+    <Services />
+    <TaskExamples />
+    <Process />
+    <ContactCta />
   </main>
-
-  <footer>
-    <p>© {new Date().getFullYear()} Liyaro</p>
-  </footer>
+  <Footer />
 </BaseLayout>

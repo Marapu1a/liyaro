@@ -5,12 +5,50 @@ body {
   color: var(--color-text);
   background: var(--color-background);
   font-family: var(--font-family-base);
-  line-height: 1.5;
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.125rem);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
 
-header,
-main,
-footer {
-  width: min(100% - (2 * var(--page-padding)), var(--content-width));
-  margin-inline: auto;
+main {
+  overflow: clip;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 550;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 7.5vw, 6.75rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4.5vw, 4.25rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+[id] {
+  scroll-margin-top: 2rem;
+}
+
+::selection {
+  color: var(--color-background);
+  background: var(--color-text);
 }

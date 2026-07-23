@@ -1,0 +1,77 @@
+---
+import Container from '../ui/Container.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <Container>
+    <div class="hero-content">
+      <h1 id="hero-title">Сначала разбираемся. Потом разрабатываем.</h1>
+      <p class="lead">
+        Liyaro помогает решать конкретные задачи с помощью сайтов, сервисов и внутренних систем.
+      </p>
+      <p class="description">
+        Вы рассказываете, как всё работает сейчас и что хотите изменить. Мы помогаем определить,
+        что действительно нужно, планируем работу и поэтапно собираем рабочее решение.
+      </p>
+      <div class="hero-action">
+        <p class="note">Можно прийти без технического задания.</p>
+        <a href="#contact">Обсудить задачу <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(5rem, 13vw, 10rem) var(--section-space);
+  }
+
+  .hero-content {
+    max-width: 68rem;
+  }
+
+  .lead {
+    max-width: 48rem;
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.35;
+  }
+
+  .description {
+    max-width: var(--text-width);
+    margin-top: 1.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .hero-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: var(--text-width);
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .note {
+    font-weight: 600;
+  }
+
+  a {
+    flex: none;
+    font-weight: 600;
+    text-underline-offset: 0.3em;
+  }
+
+  a span {
+    margin-left: 0.35rem;
+  }
+
+  @media (max-width: 36rem) {
+    .hero-action {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

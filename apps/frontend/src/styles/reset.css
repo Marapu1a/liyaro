@@ -12,12 +12,23 @@ body,
 h1,
 h2,
 h3,
-p {
+p,
+ul,
+ol {
   margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
 }
 
 body {
   min-height: 100vh;
+}
+
+a {
+  color: inherit;
 }
 
 img,

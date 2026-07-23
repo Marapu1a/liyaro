@@ -1,0 +1,10 @@
+<div class="container">
+  <slot />
+</div>
+
+<style>
+  .container {
+    width: min(100% - (2 * var(--page-padding)), var(--content-width));
+    margin-inline: auto;
+  }
+</style>
