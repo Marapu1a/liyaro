@@ -1,0 +1,344 @@
+---
+import Container from '../ui/Container.astro';
+
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
+---
+
+<section id="contact" class="contact" aria-labelledby="contact-title">
+  <Container>
+    <div class="heading">
+      <h2 id="contact-title">Расскажите о задаче</h2>
+      <p>
+        Опишите ситуацию так, как получается. Мы прочитаем и ответим туда, куда вам удобно.
+      </p>
+    </div>
+
+    <form id="inquiry-form" data-api-url={apiUrl}>
+      <div class="field field-wide">
+        <label for="message">Что происходит сейчас? Что хочется сделать или изменить?</label>
+        <textarea id="message" name="message" rows="7" minlength="10" maxlength="5000" required
+        ></textarea>
+      </div>
+
+      <fieldset class="field field-wide">
+        <legend>Куда вам ответить?</legend>
+        <div class="contact-methods">
+          <label><input type="radio" name="contactMethod" value="telegram" checked /> Telegram</label>
+          <label><input type="radio" name="contactMethod" value="whatsapp" /> WhatsApp</label>
+          <label><input type="radio" name="contactMethod" value="email" /> Email</label>
+          <label><input type="radio" name="contactMethod" value="phone" /> Телефон</label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="contact-value">Ваш контакт</label>
+        <input
+          id="contact-value"
+          name="contact"
+          type="text"
+          maxlength="254"
+          placeholder="@username или номер телефона"
+          autocomplete="off"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="name">Как к вам обращаться <span>(необязательно)</span></label>
+        <input id="name" name="name" type="text" maxlength="100" autocomplete="name" />
+      </div>
+
+      <div class="website-field" aria-hidden="true">
+        <label for="website">Сайт</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-footer field-wide">
+        <p>Контакт используем только для ответа на это сообщение.</p>
+        <button type="submit">Отправить сообщение</button>
+      </div>
+
+      <p id="form-status" class="form-status field-wide" aria-live="polite"></p>
+    </form>
+  </Container>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#inquiry-form');
+
+  if (form) {
+    const contactInput = form.querySelector<HTMLInputElement>('#contact-value');
+    const status = form.querySelector<HTMLElement>('#form-status');
+    const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const methodInputs = form.querySelectorAll<HTMLInputElement>('input[name="contactMethod"]');
+
+    const contactSettings = {
+      telegram: { type: 'text', placeholder: '@username или номер телефона', autocomplete: 'off' },
+      whatsapp: { type: 'tel', placeholder: '+7 999 000-00-00', autocomplete: 'tel' },
+      email: { type: 'email', placeholder: 'name@example.com', autocomplete: 'email' },
+      phone: { type: 'tel', placeholder: '+7 999 000-00-00', autocomplete: 'tel' },
+    } as const;
+
+    const updateContactInput = () => {
+      const method = form.querySelector<HTMLInputElement>('input[name="contactMethod"]:checked');
+      const settings = method
+        ? contactSettings[method.value as keyof typeof contactSettings]
+        : contactSettings.telegram;
+
+      if (contactInput) {
+        contactInput.type = settings.type;
+        contactInput.placeholder = settings.placeholder;
+        contactInput.autocomplete = settings.autocomplete;
+      }
+    };
+
+    methodInputs.forEach((input) => input.addEventListener('change', updateContactInput));
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!form.reportValidity() || !status || !submitButton) {
+        return;
+      }
+
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      const payload = {
+        message: formData.get('message'),
+        contactMethod: formData.get('contactMethod'),
+        contact: formData.get('contact'),
+        website: formData.get('website'),
+        ...(typeof name === 'string' && name.trim() ? { name } : {}),
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Отправляем…';
+      status.textContent = '';
+      status.dataset.state = '';
+
+      try {
+        const response = await fetch(`${form.dataset.apiUrl}/api/inquiries`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+
+        form.reset();
+        updateContactInput();
+        status.textContent = 'Сообщение отправлено. Ответим туда, куда вы указали.';
+        status.dataset.state = 'success';
+      } catch {
+        status.textContent = 'Не получилось отправить сообщение. Попробуйте ещё раз немного позже.';
+        status.dataset.state = 'error';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Отправить сообщение';
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact {
+    padding-block: var(--section-space);
+    color: var(--color-background);
+    background: var(--color-text);
+  }
+
+  .heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+    gap: var(--section-space);
+    align-items: end;
+    margin-bottom: var(--section-space);
+  }
+
+  .heading p {
+    max-width: 34rem;
+    color: #c9c6c0;
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  }
+
+  form {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem var(--space-lg);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .field-wide {
+    grid-column: 1 / -1;
+  }
+
+  label,
+  legend {
+    font-size: 0.94rem;
+    font-weight: 600;
+  }
+
+  label span {
+    color: #9d9a96;
+    font-weight: 400;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #5b5a5d;
+    border-radius: 0;
+    color: var(--color-background);
+    background: transparent;
+  }
+
+  input {
+    min-height: 3.5rem;
+  }
+
+  textarea {
+    padding: 1rem;
+    border: 1px solid #5b5a5d;
+    resize: vertical;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #8e8b87;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    outline-color: var(--color-background);
+  }
+
+  fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .contact-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .contact-methods label {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .contact-methods input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .contact-methods label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border: 1px solid #5b5a5d;
+  }
+
+  .contact-methods label:has(input:checked) {
+    color: var(--color-text);
+    background: var(--color-background);
+    border-color: var(--color-background);
+  }
+
+  .contact-methods label:has(input:focus-visible) {
+    outline: 3px solid var(--color-background);
+    outline-offset: 4px;
+  }
+
+  .form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #5b5a5d;
+  }
+
+  .form-footer p,
+  .form-status {
+    color: #9d9a96;
+    font-size: 0.9rem;
+  }
+
+  button {
+    min-height: 3.25rem;
+    padding-inline: 1.25rem;
+    border: 1px solid var(--color-background);
+    color: var(--color-text);
+    background: var(--color-background);
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .form-status {
+    min-height: 1.5rem;
+  }
+
+  .form-status[data-state='success'] {
+    color: #bfd0bf;
+  }
+
+  .form-status[data-state='error'] {
+    color: #e0b3b3;
+  }
+
+  .website-field {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  @media (max-width: 48rem) {
+    .heading,
+    form {
+      grid-template-columns: 1fr;
+    }
+
+    .heading {
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .field-wide {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .form-footer {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+</style>

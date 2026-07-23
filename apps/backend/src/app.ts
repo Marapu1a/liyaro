@@ -4,10 +4,12 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import { registerErrorHandler } from './common/error-handler.js';
 import { env } from './config/env.js';
 import { healthRoutes } from './modules/health/health.routes.js';
+import { inquiryRoutes } from './modules/inquiries/inquiry.routes.js';
 import prismaPlugin from './plugins/prisma.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
+    bodyLimit: 32 * 1024,
     logger: {
       level: env.NODE_ENV === 'production' ? 'info' : 'debug',
     },
@@ -20,6 +22,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
   await app.register(prismaPlugin);
   await app.register(healthRoutes, { prefix: '/api' });
+  await app.register(inquiryRoutes, { prefix: '/api' });
 
   return app;
 }

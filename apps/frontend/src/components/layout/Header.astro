@@ -6,15 +6,7 @@ import Container from '../ui/Container.astro';
   <Container>
     <div class="header-inner">
       <a class="logo" href="/" aria-label="Liyaro — главная">Liyaro</a>
-
-      <nav aria-label="Основная навигация">
-        <ul>
-          <li><a href="#approach">Подход</a></li>
-          <li><a href="#services">Что делаем</a></li>
-          <li><a href="#process">Как работаем</a></li>
-          <li><a class="contact-link" href="#contact">Обсудить задачу</a></li>
-        </ul>
-      </nav>
+      <a class="contact-link" href="#contact">Написать о задаче</a>
     </div>
   </Container>
 </header>
@@ -40,71 +32,22 @@ import Container from '../ui/Container.astro';
     text-decoration: none;
   }
 
-  ul {
-    display: flex;
-    align-items: center;
-    gap: clamp(1rem, 3vw, 2.5rem);
-    list-style: none;
-  }
-
-  nav a {
-    font-size: 0.94rem;
-    text-decoration: none;
-  }
-
-  nav a:not(.contact-link) {
-    color: var(--color-text-muted);
-  }
-
-  nav a:hover {
-    color: var(--color-text);
-  }
-
   .contact-link {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
     padding-inline: 1rem;
     border: 1px solid var(--color-text);
-  }
-
-  @media (max-width: 46rem) {
-    .header-inner {
-      flex-wrap: wrap;
-      padding-block: 1rem;
-    }
-
-    nav {
-      width: 100%;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    ul {
-      width: max-content;
-    }
+    font-size: 0.94rem;
+    text-decoration: none;
   }
 
   @media (max-width: 30rem) {
-    ul {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      width: 100%;
-      gap: 0.75rem 1.5rem;
-    }
-
-    nav a {
-      display: inline-flex;
-      align-items: center;
-      min-height: 2.75rem;
+    .header-inner {
+      padding-block: 1rem;
     }
 
     .contact-link {
-      justify-content: center;
       padding-inline: 0.75rem;
     }
   }

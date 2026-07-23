@@ -10,7 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prisma:generate": "dotenv -e ../../.env -- prisma generate",
     "prisma:validate": "dotenv -e ../../.env -- prisma validate",
-    "prisma:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "prisma:migrate": "dotenv -e ../../.env -- prisma migrate dev --name",
     "prisma:studio": "dotenv -e ../../.env -- prisma studio"
   },
   "dependencies": {

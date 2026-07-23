@@ -5,17 +5,14 @@ import Container from '../ui/Container.astro';
 <section class="hero" aria-labelledby="hero-title">
   <Container>
     <div class="hero-content">
-      <h1 id="hero-title">Сначала разбираемся. Потом разрабатываем.</h1>
+      <h1 id="hero-title">Расскажите, какую задачу хотите решить.</h1>
       <p class="lead">
-        Liyaro помогает решать конкретные задачи с помощью сайтов, сервисов и внутренних систем.
-      </p>
-      <p class="description">
-        Вы рассказываете, как всё работает сейчас и что хотите изменить. Мы помогаем определить,
-        что действительно нужно, планируем работу и поэтапно собираем рабочее решение.
+        Необязательно заранее знать, нужен вам сайт, сервис или что-то другое. Опишите ситуацию
+        своими словами — этого достаточно, чтобы начать.
       </p>
       <div class="hero-action">
-        <p class="note">Можно прийти без технического задания.</p>
-        <a href="#contact">Обсудить задачу <span aria-hidden="true">↓</span></a>
+        <p class="note">Можно прийти с задачей, идеей или просто вопросом.</p>
+        <a href="#contact">Написать о задаче <span aria-hidden="true">↓</span></a>
       </div>
     </div>
   </Container>
@@ -35,12 +32,6 @@ import Container from '../ui/Container.astro';
     margin-top: clamp(2rem, 5vw, 3.5rem);
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.35;
-  }
-
-  .description {
-    max-width: var(--text-width);
-    margin-top: 1.5rem;
-    color: var(--color-text-muted);
   }
 
   .hero-action {

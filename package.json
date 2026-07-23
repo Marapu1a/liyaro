@@ -16,7 +16,7 @@
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "prisma:generate": "npm run prisma:generate --workspace @liyaro/backend",
-    "prisma:migrate": "npm run prisma:migrate --workspace @liyaro/backend",
+    "prisma:migrate": "npm --workspace @liyaro/backend run prisma:migrate --",
     "prisma:studio": "npm run prisma:studio --workspace @liyaro/backend"
   },
   "engines": {

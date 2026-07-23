@@ -6,3 +6,21 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum ContactMethod {
+  TELEGRAM @map("telegram")
+  WHATSAPP @map("whatsapp")
+  EMAIL    @map("email")
+  PHONE    @map("phone")
+}
+
+model Inquiry {
+  id            String        @id @default(cuid())
+  message       String        @db.Text
+  contactMethod ContactMethod @map("contact_method")
+  contact       String
+  name          String?
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("inquiries")
+}

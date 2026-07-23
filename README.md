@@ -80,6 +80,7 @@ npm run dev:backend
 - frontend: http://localhost:4321
 - backend: http://localhost:3000
 - health endpoint: http://localhost:3000/api/health
+- отправка обращения: `POST http://localhost:3000/api/inquiries`
 
 Backend подключается к PostgreSQL при старте, поэтому перед его запуском база должна быть доступна.
 
@@ -109,7 +110,7 @@ npm run prisma:generate
 Создать и применить первую миграцию после добавления бизнес-моделей:
 
 ```bash
-npm run prisma:migrate -- --name init
+npm run prisma:migrate -- init
 ```
 
 Открыть Prisma Studio:
@@ -118,4 +119,5 @@ npm run prisma:migrate -- --name init
 npm run prisma:studio
 ```
 
-Текущая Prisma-схема намеренно не содержит бизнес-моделей и готова к их добавлению позже.
+Prisma-схема содержит минимальную модель `Inquiry` для сообщений с главной страницы. История
+ключевых продуктовых и архитектурных решений ведётся в `docs/development-log.md`.
