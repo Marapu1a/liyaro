@@ -30,8 +30,26 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <script is:inline>
+      document.documentElement.classList.add('has-js');
+      try {
+        if (!window.localStorage.getItem('liyaro:build-intro:v1')) {
+          document.documentElement.classList.add('build-intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('build-intro-pending');
+      }
+      window.setTimeout(() => document.documentElement.classList.remove('build-intro-pending'), 5000);
+    </script>
   </head>
   <body>
     <slot />
+    <script>
+      import { initBuildSequence } from '../scripts/buildSequence';
+      import { initInteractions } from '../scripts/interactions';
+
+      initBuildSequence();
+      initInteractions();
+    </script>
   </body>
 </html>

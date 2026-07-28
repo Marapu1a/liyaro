@@ -19,19 +19,36 @@ const steps = [
 
 <section class="next-steps" aria-labelledby="next-steps-title">
   <Container>
-    <div class="heading">
-      <p class="section-label">Что будет дальше</p>
+    <div class="heading" data-reveal>
+      <p class="section-label">02 / Что будет дальше</p>
       <h2 id="next-steps-title">Сначала — обычный разговор</h2>
     </div>
 
-    <ol>
+    <ol data-steps-sequence>
       {
         steps.map((step, index) => (
-          <li>
+          <li data-step-motion>
             <p class="number">0{index + 1}</p>
             <div>
-              <h3>{step.title}</h3>
-              <p class="description">{step.description}</p>
+              <h3 data-typewriter data-text={step.title} aria-label={step.title}>
+                <span class="typewriter-sizer" aria-hidden="true">{step.title}</span>
+                <span class="typewriter-output" aria-hidden="true">{step.title}</span>
+                <span class="typewriter-caret" aria-hidden="true"></span>
+              </h3>
+              <p class="description" data-blur-text aria-label={step.description}>
+                {
+                  step.description.split(' ').map((word, wordIndex) => (
+                    <span
+                      class="description-word"
+                      aria-hidden="true"
+                      style={`--word-delay: ${wordIndex * 28}ms`}
+                    >
+                      {word}
+                      {wordIndex < step.description.split(' ').length - 1 ? '\u00A0' : ''}
+                    </span>
+                  ))
+                }
+              </p>
             </div>
           </li>
         ))
@@ -42,7 +59,18 @@ const steps = [
 
 <style>
   .next-steps {
+    position: relative;
     padding-block: var(--section-space);
+  }
+
+  .next-steps::before {
+    position: absolute;
+    top: 0;
+    right: 5vw;
+    width: clamp(7rem, 15vw, 13rem);
+    height: 1px;
+    background: var(--color-accent);
+    content: '';
   }
 
   .heading {
@@ -72,6 +100,18 @@ const steps = [
     gap: var(--space-lg);
     padding-block: clamp(1.75rem, 4vw, 2.75rem);
     border-bottom: 1px solid var(--color-border);
+    transition:
+      padding-inline 0.45s var(--ease-out),
+      background 0.45s var(--ease-out);
+  }
+
+  :global(.has-js) li[data-step-motion] .number {
+    opacity: 0.42;
+  }
+
+  li:hover {
+    padding-inline: 1rem;
+    background: rgb(255 255 255 / 0.38);
   }
 
   li > div {
@@ -80,9 +120,105 @@ const steps = [
     gap: var(--space-lg);
   }
 
+  h3 {
+    position: relative;
+    width: fit-content;
+  }
+
+  .typewriter-sizer {
+    visibility: visible;
+  }
+
+  .typewriter-output {
+    display: none;
+  }
+
+  :global(.has-js) .typewriter-sizer {
+    visibility: hidden;
+  }
+
+  :global(.has-js) .typewriter-output {
+    position: absolute;
+    inset: 0 auto auto 0;
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .typewriter-caret {
+    display: none;
+  }
+
+  :global(.has-js) .typewriter-caret {
+    position: absolute;
+    top: 50%;
+    bottom: auto;
+    left: var(--caret-position, 0%);
+    display: block;
+    width: 0.52em;
+    height: 2px;
+    margin-left: 0.14em;
+    background: var(--color-accent);
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+
+  :global(.has-js) li.is-typing .typewriter-caret {
+    opacity: 1;
+    animation: caret-pulse 0.72s steps(1, end) infinite;
+  }
+
   .description {
     max-width: 34rem;
     color: var(--color-text-muted);
+  }
+
+  .description-word {
+    display: inline-block;
+  }
+
+  :global(.has-js) .description-word {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(0.4em);
+    transition:
+      opacity 0.42s var(--ease-out),
+      filter 0.42s var(--ease-out),
+      transform 0.42s var(--ease-out);
+    transition-delay: var(--word-delay);
+  }
+
+  :global(.has-js) li.is-described .description-word {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+
+  .number {
+    color: var(--color-accent);
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.45s var(--ease-out);
+  }
+
+  :global(.has-js) li.is-typing .number,
+  :global(.has-js) li.is-complete .number {
+    opacity: 1;
+  }
+
+  li:hover .number {
+    transform: translateX(0.35rem);
+  }
+
+  @keyframes caret-pulse {
+    0%,
+    48% {
+      opacity: 1;
+    }
+
+    49%,
+    100% {
+      opacity: 0;
+    }
   }
 
   @media (max-width: 44rem) {
@@ -100,5 +236,10 @@ const steps = [
     li > div {
       gap: 1rem;
     }
+
+    :global(.has-js) .typewriter-output {
+      white-space: normal;
+    }
   }
+
 </style>

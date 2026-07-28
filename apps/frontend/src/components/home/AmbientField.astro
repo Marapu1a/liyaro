@@ -1,0 +1,127 @@
+<div class="ambient-field" aria-hidden="true">
+  <div class="grid"></div>
+
+  <svg viewBox="0 0 1440 860" preserveAspectRatio="none">
+    <g class="sketch-lines">
+      <path d="M-24 168H126L158 136H292" />
+      <path d="M596 58H824L850 82H1018" />
+      <path d="M1256 120H1480" />
+      <path d="M112 632H282V716H438" />
+      <path d="M1004 574H1182V684H1480" />
+      <path class="broken" d="M716 754H886" />
+    </g>
+
+    <g class="sketch-marks">
+      <circle cx="158" cy="136" r="4" />
+      <circle cx="850" cy="82" r="4" />
+      <circle cx="1182" cy="684" r="4" />
+    </g>
+
+    <g class="sketch-labels">
+      <text x="174" y="124">INPUT</text>
+      <text x="864" y="72">LOGIC</text>
+      <text x="1200" y="672">OUTPUT</text>
+      <text class="note" x="300" y="704">CHECK / REFINE</text>
+    </g>
+  </svg>
+
+  <p class="revision">DRAFT / 03</p>
+</div>
+
+<style>
+  .ambient-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, black 0%, black 68%, transparent 100%);
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+    background-image:
+      linear-gradient(rgb(18 19 17 / 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(18 19 17 / 0.08) 1px, transparent 1px);
+    background-size: clamp(3.5rem, 7vw, 6.5rem) clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sketch-lines {
+    fill: none;
+    stroke: rgb(18 19 17 / 0.16);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .sketch-lines .broken {
+    stroke-dasharray: 4 8;
+  }
+
+  .sketch-marks {
+    fill: var(--color-background);
+    stroke: rgb(18 19 17 / 0.24);
+    stroke-width: 0.9;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .sketch-labels {
+    fill: rgb(18 19 17 / 0.3);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .sketch-labels .note {
+    fill: rgb(213 79 45 / 0.42);
+  }
+
+  .revision {
+    position: absolute;
+    right: max(var(--page-padding), 5vw);
+    top: 15%;
+    color: rgb(213 79 45 / 0.42);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+  }
+
+  @media (max-width: 44rem) {
+    .grid {
+      opacity: 0.16;
+      background-size: 4rem 4rem;
+    }
+
+    svg {
+      left: 0;
+      width: 100%;
+    }
+
+    .revision {
+      display: none;
+    }
+
+    .sketch-labels .note,
+    .sketch-labels text:nth-child(2),
+    .sketch-labels text:nth-child(3),
+    .sketch-marks circle:nth-child(2),
+    .sketch-marks circle:nth-child(3) {
+      display: none;
+    }
+
+    .sketch-lines {
+      opacity: 0.72;
+    }
+  }
+</style>

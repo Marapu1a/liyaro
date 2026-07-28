@@ -2,22 +2,27 @@
 import Container from '../ui/Container.astro';
 
 const messages = [
-  'Работаем уже несколько лет. Хочется уйти от Excel, но не понимаем, с чего начать.',
-  'Есть идея сервиса. Пока вообще непонятно, стоит ли её делать.',
-  'Хотим расширить бизнес. Кажется, без собственной системы уже не получится.',
-  'Есть существующий проект. Нужно понять, дорабатывать его или проще сделать иначе.',
+  { label: 'Автоматизация', text: 'Работаем уже несколько лет. Хочется уйти от Excel, но не понимаем, с чего начать.' },
+  { label: 'Новый сервис', text: 'Есть идея сервиса. Пока вообще непонятно, стоит ли её делать.' },
+  { label: 'Рост', text: 'Хотим расширить бизнес. Кажется, без собственной системы уже не получится.' },
+  { label: 'Аудит', text: 'Есть существующий проект. Нужно понять, дорабатывать его или проще сделать иначе.' },
 ];
 ---
 
 <section class="situations" aria-labelledby="situations-title">
   <Container>
-    <div class="heading">
-      <p class="section-label">Можно написать как есть</p>
+    <div class="heading" data-reveal>
+      <p class="section-label">01 / Можно написать как есть</p>
       <h2 id="situations-title">Необязательно формулировать техническую задачу</h2>
     </div>
 
     <div class="messages">
-      {messages.map((message) => <blockquote>{message}</blockquote>)}
+      {messages.map((message, index) => (
+        <blockquote data-spotlight-card data-reveal style={`--reveal-delay: ${index * 70}ms`}>
+          <p class="message-label"><span>0{index + 1}</span>{message.label}</p>
+          <p>{message.text}</p>
+        </blockquote>
+      ))}
     </div>
   </Container>
 </section>
@@ -25,7 +30,9 @@ const messages = [
 <style>
   .situations {
     padding-block: var(--section-space);
-    background: var(--color-surface);
+    background:
+      radial-gradient(circle at 88% 12%, rgb(213 79 45 / 0.08), transparent 26rem),
+      var(--color-surface);
   }
 
   .heading {
@@ -50,6 +57,11 @@ const messages = [
   }
 
   blockquote {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     min-height: 13rem;
     margin: 0;
     padding: clamp(1.5rem, 4vw, 2.5rem);
@@ -58,6 +70,49 @@ const messages = [
     font-size: clamp(1.15rem, 2vw, 1.5rem);
     line-height: 1.45;
     text-wrap: pretty;
+    overflow: hidden;
+    transition:
+      transform 0.45s var(--ease-out),
+      border-color 0.45s var(--ease-out);
+  }
+
+  blockquote::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: 0;
+    background: radial-gradient(
+      24rem circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+      rgb(255 255 255 / 0.72),
+      transparent 58%
+    );
+    content: '';
+    transition: opacity 0.35s ease;
+  }
+
+  blockquote:hover {
+    z-index: 1;
+    border-color: #aaa397;
+    transform: translateY(-0.35rem);
+  }
+
+  blockquote:hover::before {
+    opacity: 1;
+  }
+
+  .message-label {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .message-label span {
+    color: var(--color-accent);
   }
 
   blockquote:nth-child(odd) {

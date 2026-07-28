@@ -6,14 +6,14 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 
 <section id="contact" class="contact" aria-labelledby="contact-title">
   <Container>
-    <div class="heading">
+    <div class="heading" data-reveal>
       <h2 id="contact-title">Расскажите о задаче</h2>
       <p>
         Опишите ситуацию так, как получается. Мы прочитаем и ответим туда, куда вам удобно.
       </p>
     </div>
 
-    <form id="inquiry-form" data-api-url={apiUrl}>
+    <form id="inquiry-form" data-api-url={apiUrl} data-reveal style="--reveal-delay: 120ms">
       <div class="field field-wide">
         <label for="message">Что происходит сейчас? Что хочется сделать или изменить?</label>
         <textarea id="message" name="message" rows="7" minlength="10" maxlength="5000" required
@@ -55,7 +55,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 
       <div class="form-footer field-wide">
         <p>Контакт используем только для ответа на это сообщение.</p>
-        <button type="submit">Отправить сообщение</button>
+        <button type="submit" data-magnet data-magnet-strength="0.14">Отправить сообщение <span aria-hidden="true">↗</span></button>
       </div>
 
       <p id="form-status" class="form-status field-wide" aria-live="polite"></p>
@@ -144,9 +144,24 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 
 <style>
   .contact {
+    position: relative;
     padding-block: var(--section-space);
     color: var(--color-background);
-    background: var(--color-text);
+    background:
+      radial-gradient(circle at 82% 18%, rgb(213 79 45 / 0.2), transparent 26rem),
+      var(--color-dark);
+    overflow: hidden;
+  }
+
+  .contact::before {
+    position: absolute;
+    top: 5rem;
+    right: -7rem;
+    width: 18rem;
+    height: 18rem;
+    border: 1px solid rgb(245 243 239 / 0.16);
+    border-radius: 50%;
+    content: '';
   }
 
   .heading {
@@ -288,6 +303,11 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     background: var(--color-background);
     font-weight: 650;
     cursor: pointer;
+  }
+
+  button span {
+    margin-left: 0.65rem;
+    color: var(--color-accent);
   }
 
   button:disabled {

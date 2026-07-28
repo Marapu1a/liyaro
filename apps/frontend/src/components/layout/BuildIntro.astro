@@ -1,0 +1,118 @@
+<div class="build-intro" data-build-intro aria-label="Вступительная анимация Liyaro">
+  <div class="build-intro__surface" data-build-surface></div>
+
+  <p class="build-intro__command" data-build-command aria-live="polite">
+    <span data-build-command-output></span><span class="build-intro__cursor" aria-hidden="true"></span>
+  </p>
+
+  <p class="build-intro__logo" data-build-flying-logo aria-hidden="true">Liyaro</p>
+
+  <button class="build-intro__skip" type="button" data-build-skip>
+    Пропустить <span aria-hidden="true">↗</span>
+  </button>
+</div>
+
+<style>
+  .build-intro {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    color: var(--color-text);
+  }
+
+  .build-intro.is-active {
+    display: block;
+  }
+
+  .build-intro__surface {
+    position: absolute;
+    inset: 0;
+    background: var(--color-background);
+  }
+
+  .build-intro__command,
+  .build-intro__logo,
+  .build-intro__skip {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .build-intro__command {
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  .build-intro__cursor {
+    display: inline-block;
+    width: 0.65em;
+    height: 2px;
+    margin-left: 0.35em;
+    background: var(--color-accent);
+    vertical-align: 0.2em;
+    animation: build-cursor 0.72s steps(1, end) infinite;
+  }
+
+  .build-intro__logo {
+    top: 0;
+    left: 0;
+    margin: 0;
+    font-weight: 700;
+    opacity: 0;
+    transform-origin: top left;
+    white-space: nowrap;
+  }
+
+  .build-intro__skip {
+    right: max(var(--page-padding), 2rem);
+    bottom: max(var(--page-padding), 2rem);
+    padding: 0;
+    border: 0;
+    color: var(--color-text-muted);
+    background: transparent;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .build-intro__skip span {
+    margin-left: 0.35rem;
+    color: var(--color-accent);
+  }
+
+  @keyframes build-cursor {
+    0%,
+    48% {
+      opacity: 1;
+    }
+
+    49%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 32rem) {
+    .build-intro__command {
+      width: calc(100% - 2 * var(--page-padding));
+      text-align: center;
+    }
+
+    .build-intro__skip {
+      right: var(--page-padding);
+      bottom: var(--page-padding);
+    }
+  }
+</style>
