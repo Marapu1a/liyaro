@@ -5,7 +5,7 @@
     <span data-build-command-output></span><span class="build-intro__cursor" aria-hidden="true"></span>
   </p>
 
-  <p class="build-intro__logo" data-build-flying-logo aria-hidden="true">Liyaro</p>
+  <p class="build-intro__logo" data-build-flying-logo aria-hidden="true">LIYARO</p>
 
   <button class="build-intro__skip" type="button" data-build-skip>
     Пропустить <span aria-hidden="true">↗</span>
@@ -54,12 +54,18 @@
 
   .build-intro__cursor {
     display: inline-block;
-    width: 0.65em;
+    width: 0.5em;
     height: 2px;
-    margin-left: 0.35em;
+    margin-left: 0.22em;
     background: var(--color-accent);
     vertical-align: 0.2em;
     animation: build-cursor 0.72s steps(1, end) infinite;
+  }
+
+  .build-intro__command.is-complete .build-intro__cursor {
+    opacity: 0;
+    animation: none;
+    transition: opacity 0.18s ease-out;
   }
 
   .build-intro__logo {

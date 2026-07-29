@@ -6,7 +6,7 @@ import Container from '../ui/Container.astro';
   <Container>
     <div class="header-inner">
       <a class="logo" href="/" aria-label="Liyaro — главная">
-        <span data-build-logo-target>Liyaro</span>
+        <span data-build-logo-target>LIYARO</span>
         <small>студия разработки</small>
       </a>
       <div class="header-actions">
@@ -45,6 +45,7 @@ import Container from '../ui/Container.astro';
     left: 0;
     height: 1px;
     background: var(--color-border);
+    opacity: 1;
   }
 
   .header-inner {
@@ -129,12 +130,19 @@ import Container from '../ui/Container.astro';
     transform: scaleX(0);
   }
 
+  :global(html.is-building) .site-header::after {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
   :global(html.is-building) .site-header::before {
     transition: transform 0.68s var(--ease-out);
   }
 
   :global(html.is-building) .site-header::after {
-    transition: transform 0.62s var(--ease-out);
+    transition:
+      transform 0.88s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.22s linear;
   }
 
   :global(html.is-building) .logo > span,
@@ -166,6 +174,10 @@ import Container from '../ui/Container.astro';
   :global(html.is-building) .site-header.is-fill::before,
   :global(html.is-building) .site-header.is-line::after {
     transform: scaleX(1);
+  }
+
+  :global(html.is-building) .site-header.is-line::after {
+    opacity: 1;
   }
 
   :global(html.is-building) .site-header.is-logo .logo > span,

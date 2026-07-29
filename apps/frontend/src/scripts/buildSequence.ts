@@ -102,6 +102,7 @@ export function initBuildSequence() {
     resetHeader();
     cancelElementAnimations();
     commandOutput.textContent = '';
+    command.classList.remove('is-complete');
     command.style.opacity = '1';
     flyingLogo.removeAttribute('style');
     surface.removeAttribute('style');
@@ -119,7 +120,8 @@ export function initBuildSequence() {
       await wait(character === ' ' ? 26 : 38);
     }
 
-    await wait(260);
+    command.classList.add('is-complete');
+    await wait(1100);
     if (currentId !== sequenceId) return;
 
     await trackAnimation(
@@ -188,7 +190,7 @@ export function initBuildSequence() {
     header.classList.add('is-details');
     await wait(360);
     header.classList.add('is-line');
-    await wait(420);
+    await wait(940);
 
     finishSequence(currentId);
   };
