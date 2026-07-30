@@ -32,13 +32,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
     <meta name="twitter:description" content={description} />
     <script is:inline>
       document.documentElement.classList.add('has-js');
-      try {
-        if (!window.localStorage.getItem('liyaro:build-intro:v1')) {
-          document.documentElement.classList.add('build-intro-pending');
-        }
-      } catch {
-        document.documentElement.classList.add('build-intro-pending');
-      }
+      document.documentElement.classList.add('build-intro-pending');
       window.setTimeout(() => document.documentElement.classList.remove('build-intro-pending'), 5000);
     </script>
   </head>

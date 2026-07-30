@@ -9,7 +9,7 @@
   --color-accent-soft: #edb19f;
   --color-dark: #151716;
   --color-focus: #d54f2d;
-  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-base: 'Onest Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --content-width: 76rem;
   --text-width: 46rem;
   --page-padding: clamp(1rem, 4vw, 2.5rem);

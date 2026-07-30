@@ -45,60 +45,52 @@ export function initInteractions() {
     });
   }
 
-  const stepsSequence = document.querySelector<HTMLOListElement>('[data-steps-sequence]');
+  const motionEnabled =
+    !reducedMotion || document.documentElement.classList.contains('motion-enabled');
 
-  if (stepsSequence) {
-    stepsSequence
-      .querySelectorAll<HTMLElement>('.typewriter-output')
-      .forEach((output) => (output.textContent = ''));
-
-    const wait = (duration: number) =>
-      new Promise<void>((resolve) => window.setTimeout(resolve, duration));
-
-    const typeStep = async (step: HTMLElement) => {
-      const typewriter = step.querySelector<HTMLElement>('[data-typewriter]');
-      const output = step.querySelector<HTMLElement>('.typewriter-output');
-      const text = typewriter?.dataset.text ?? '';
-
-      if (!typewriter || !output || !text) return;
-
-      output.textContent = '';
-      step.classList.add('is-typing');
-
-      for (const character of Array.from(text)) {
-        output.textContent += character;
-        typewriter.style.setProperty(
-          '--caret-position',
-          `${output.getBoundingClientRect().width}px`,
-        );
-        await wait(character === ' ' ? 18 : 30);
-      }
-
-      step.classList.remove('is-typing');
-      step.classList.add('is-described');
-      await wait(210);
-      step.classList.add('is-complete');
-    };
-
-    const playSequence = async () => {
-      const steps = Array.from(stepsSequence.querySelectorAll<HTMLElement>('[data-step-motion]'));
-
-      for (const step of steps) {
-        await typeStep(step);
-        await wait(140);
-      }
-    };
-
-    const stepsObserver = new IntersectionObserver(
-      ([entry], observer) => {
-        if (!entry.isIntersecting) return;
-        observer.unobserve(entry.target);
-        void playSequence();
-      },
-      { threshold: 0.55, rootMargin: '0px 0px -18% 0px' },
+  document.querySelectorAll<HTMLElement>('[data-scroll-stack]').forEach((stack) => {
+    const cards = Array.from(
+      stack.querySelectorAll<HTMLElement>('[data-scroll-stack-card]'),
     );
 
-    const firstStep = stepsSequence.querySelector<HTMLElement>('[data-step-motion]');
-    if (firstStep) stepsObserver.observe(firstStep);
-  }
+    if (!motionEnabled || cards.length < 2) return;
+
+    let animationFrame = 0;
+
+    const updateStack = () => {
+      animationFrame = 0;
+      const viewportHeight = window.innerHeight;
+      const progressStart = viewportHeight * 0.82;
+
+      cards.forEach((card, index) => {
+        const nextCard = cards[index + 1];
+        if (!nextCard) {
+          card.style.setProperty('--stack-scale', '1');
+          return;
+        }
+
+        const progressEnd =
+          Math.min(viewportHeight * 0.18, 135) + (index + 1) * 22;
+        const nextTop = nextCard.getBoundingClientRect().top;
+        const progress = Math.min(
+          1,
+          Math.max(0, (progressStart - nextTop) / (progressStart - progressEnd)),
+        );
+        const targetScale = 1 - (cards.length - index - 1) * 0.025;
+        const scale = 1 - progress * (1 - targetScale);
+
+        card.style.setProperty('--stack-scale', scale.toFixed(4));
+      });
+    };
+
+    const requestUpdate = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(updateStack);
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    updateStack();
+  });
+
 }

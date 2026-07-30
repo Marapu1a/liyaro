@@ -2,30 +2,20 @@
 import Container from '../ui/Container.astro';
 import AmbientField from './AmbientField.astro';
 
-const titleWords = ['Расскажите,', 'какую', 'задачу', 'хотите', 'решить.'];
+const titleWords = ['Расскажите,', 'с', 'чем', 'пришли.'];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <AmbientField />
   <Container>
     <div class="hero-content">
-      <p class="eyebrow" data-reveal>Независимая студия разработки · 2026</p>
-      <h1 id="hero-title">
-        {titleWords.map((word, index) => <span data-reveal style={`--reveal-delay: ${60 + index * 55}ms`}>{word}</span>)}
+      <h1 id="hero-title" aria-label="Расскажите, с чем пришли.">
+        {titleWords.map((word, index) => <span aria-hidden="true" data-reveal style={`--reveal-delay: ${60 + index * 55}ms`}>{word}</span>)}
       </h1>
       <p class="lead" data-reveal style="--reveal-delay: 220ms">
-        Необязательно заранее знать, нужен вам сайт, сервис или что-то другое. Опишите ситуацию
-        своими словами — этого достаточно, чтобы начать.
+        Упростить процесс, автоматизировать рутину, запустить новое или переделать старое —
+        приходить с готовым ТЗ не обязательно.
       </p>
-      <div class="hero-action" data-reveal style="--reveal-delay: 300ms">
-        <p class="note">Можно прийти с задачей, идеей или просто вопросом.</p>
-        <a href="#contact" data-magnet data-magnet-strength="0.2">Написать о задаче <span aria-hidden="true">↘</span></a>
-      </div>
-      <ul class="directions" aria-label="Направления работы" data-reveal style="--reveal-delay: 360ms">
-        <li>Сайты</li>
-        <li>Сервисы</li>
-        <li>Внутренние системы</li>
-      </ul>
     </div>
   </Container>
 </section>
@@ -42,15 +32,6 @@ const titleWords = ['Расскажите,', 'какую', 'задачу', 'хо
     position: relative;
     z-index: 1;
     max-width: 68rem;
-  }
-
-  .eyebrow {
-    margin-bottom: clamp(2.5rem, 7vw, 5rem);
-    color: var(--color-accent);
-    font-size: 0.73rem;
-    font-weight: 700;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
   }
 
   h1 {
@@ -70,64 +51,8 @@ const titleWords = ['Расскажите,', 'какую', 'задачу', 'хо
     line-height: 1.35;
   }
 
-  .hero-action {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    max-width: 55rem;
-    margin-left: min(8vw, 6rem);
-    margin-top: clamp(2.5rem, 6vw, 4.5rem);
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .note {
-    font-weight: 600;
-  }
-
-  a {
-    flex: none;
-    display: inline-flex;
-    gap: 0.6rem;
-    align-items: center;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--color-text);
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  a span {
-    color: var(--color-accent);
-    font-size: 1.2em;
-  }
-
-  .directions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.55rem;
-    margin: clamp(3rem, 8vw, 6rem) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .directions li {
-    padding: 0.45rem 0.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 100vw;
-    color: var(--color-text-muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
-  }
-
   @media (max-width: 36rem) {
-    .hero-action {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .lead,
-    .hero-action {
+    .lead {
       margin-left: 0;
     }
   }

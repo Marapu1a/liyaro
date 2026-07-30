@@ -5,11 +5,22 @@
     <span data-build-command-output></span><span class="build-intro__cursor" aria-hidden="true"></span>
   </p>
 
-  <p class="build-intro__logo" data-build-flying-logo aria-hidden="true">LIYARO</p>
+  <img
+    class="build-intro__logo"
+    src="/brand/liyaro-logo.svg"
+    alt=""
+    width="630"
+    height="470"
+    data-build-flying-logo
+  />
 
-  <button class="build-intro__skip" type="button" data-build-skip>
-    Пропустить <span aria-hidden="true">↗</span>
-  </button>
+  <button
+    class="build-intro__control"
+    type="button"
+    aria-label="Ускорить вступительную анимацию"
+    data-build-control
+  ></button>
+  <p class="build-intro__hint" data-build-hint>Клик — ускорить</p>
 </div>
 
 <style>
@@ -34,7 +45,7 @@
 
   .build-intro__command,
   .build-intro__logo,
-  .build-intro__skip {
+  .build-intro__hint {
     position: absolute;
     z-index: 1;
   }
@@ -71,31 +82,36 @@
   .build-intro__logo {
     top: 0;
     left: 0;
-    margin: 0;
-    font-weight: 700;
+    display: block;
+    width: 4.7rem;
+    height: auto;
     opacity: 0;
     transform-origin: top left;
-    white-space: nowrap;
   }
 
-  .build-intro__skip {
-    right: max(var(--page-padding), 2rem);
-    bottom: max(var(--page-padding), 2rem);
+  .build-intro__control {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     padding: 0;
     border: 0;
-    color: var(--color-text-muted);
     background: transparent;
+    cursor: pointer;
+  }
+
+  .build-intro__hint {
+    right: max(var(--page-padding), 2rem);
+    bottom: max(var(--page-padding), 2rem);
+    margin: 0;
+    color: var(--color-text-muted);
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 0.68rem;
     font-weight: 650;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  .build-intro__skip span {
-    margin-left: 0.35rem;
-    color: var(--color-accent);
+    pointer-events: none;
   }
 
   @keyframes build-cursor {
@@ -116,7 +132,7 @@
       text-align: center;
     }
 
-    .build-intro__skip {
+    .build-intro__hint {
       right: var(--page-padding);
       bottom: var(--page-padding);
     }

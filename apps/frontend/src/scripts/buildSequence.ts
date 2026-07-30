@@ -1,9 +1,5 @@
-const STORAGE_KEY = 'liyaro:build-intro:v1';
 const MOTION_KEY = 'liyaro:motion:full';
 const BUILD_COMMAND = 'BUILD SOMETHING USEFUL';
-
-const wait = (duration: number) =>
-  new Promise<void>((resolve) => window.setTimeout(resolve, duration));
 
 export function initBuildSequence() {
   const root = document.querySelector<HTMLElement>('[data-build-intro]');
@@ -11,17 +7,18 @@ export function initBuildSequence() {
   const command = document.querySelector<HTMLElement>('[data-build-command]');
   const commandOutput = document.querySelector<HTMLElement>('[data-build-command-output]');
   const flyingLogo = document.querySelector<HTMLElement>('[data-build-flying-logo]');
-  const skipButton = document.querySelector<HTMLButtonElement>('[data-build-skip]');
+  const control = document.querySelector<HTMLButtonElement>('[data-build-control]');
+  const hint = document.querySelector<HTMLElement>('[data-build-hint]');
   const header = document.querySelector<HTMLElement>('[data-build-header]');
   const logoTarget = document.querySelector<HTMLElement>('[data-build-logo-target]');
-  const rebuildButton = document.querySelector<HTMLButtonElement>('[data-build-replay]');
   if (
     !root ||
     !surface ||
     !command ||
     !commandOutput ||
     !flyingLogo ||
-    !skipButton ||
+    !control ||
+    !hint ||
     !header ||
     !logoTarget
   ) {
@@ -31,8 +28,35 @@ export function initBuildSequence() {
 
   let sequenceId = 0;
   let isRunning = false;
+  let interactionCount = 0;
+  let speedMultiplier = 1;
   let revealCleanup = 0;
   const activeAnimations = new Set<Animation>();
+
+  const wait = (duration: number, currentId: number) =>
+    new Promise<void>((resolve) => {
+      let elapsed = 0;
+      let previousTime = window.performance.now();
+
+      const tick = (currentTime: number) => {
+        if (currentId !== sequenceId) {
+          resolve();
+          return;
+        }
+
+        elapsed += (currentTime - previousTime) * speedMultiplier;
+        previousTime = currentTime;
+
+        if (elapsed >= duration) {
+          resolve();
+          return;
+        }
+
+        window.requestAnimationFrame(tick);
+      };
+
+      window.requestAnimationFrame(tick);
+    });
 
   const trackAnimation = async (
     element: Element,
@@ -40,6 +64,7 @@ export function initBuildSequence() {
     options: KeyframeAnimationOptions,
   ) => {
     const animation = element.animate(keyframes, options);
+    animation.playbackRate = speedMultiplier;
     activeAnimations.add(animation);
 
     try {
@@ -61,7 +86,7 @@ export function initBuildSequence() {
     });
   };
 
-  const finishSequence = (currentId: number, remember = true) => {
+  const finishSequence = (currentId: number) => {
     if (currentId !== sequenceId) return;
 
     activeAnimations.forEach((animation) => animation.cancel());
@@ -82,13 +107,6 @@ export function initBuildSequence() {
       document.documentElement.classList.remove('is-revealing-main');
     }, 750);
 
-    if (remember) {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, 'seen');
-      } catch {
-        // Storage can be unavailable in privacy-restricted contexts.
-      }
-    }
   };
 
   const runSequence = async () => {
@@ -96,6 +114,8 @@ export function initBuildSequence() {
 
     isRunning = true;
     const currentId = ++sequenceId;
+    interactionCount = 0;
+    speedMultiplier = 1;
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     window.clearTimeout(revealCleanup);
     document.documentElement.classList.remove('is-revealing-main');
@@ -103,6 +123,8 @@ export function initBuildSequence() {
     cancelElementAnimations();
     commandOutput.textContent = '';
     command.classList.remove('is-complete');
+    hint.textContent = 'Клик — ускорить';
+    control.setAttribute('aria-label', 'Ускорить вступительную анимацию');
     command.style.opacity = '1';
     flyingLogo.removeAttribute('style');
     surface.removeAttribute('style');
@@ -112,16 +134,16 @@ export function initBuildSequence() {
     document.documentElement.classList.remove('build-intro-pending');
     document.body.style.overflow = 'hidden';
 
-    await wait(180);
+    await wait(180, currentId);
 
     for (const character of Array.from(BUILD_COMMAND)) {
       if (currentId !== sequenceId) return;
       commandOutput.textContent += character;
-      await wait(character === ' ' ? 26 : 38);
+      await wait(character === ' ' ? 26 : 38, currentId);
     }
 
     command.classList.add('is-complete');
-    await wait(1100);
+    await wait(1100, currentId);
     if (currentId !== sequenceId) return;
 
     await trackAnimation(
@@ -134,7 +156,6 @@ export function initBuildSequence() {
     );
 
     const targetRect = logoTarget.getBoundingClientRect();
-    const targetStyle = window.getComputedStyle(logoTarget);
     const startScale = Math.min(5.4, Math.max(3.4, (window.innerWidth * 0.42) / targetRect.width));
     const startX = window.innerWidth / 2 - targetRect.left - (targetRect.width * startScale) / 2;
     const startY =
@@ -143,11 +164,8 @@ export function initBuildSequence() {
 
     flyingLogo.style.left = `${targetRect.left}px`;
     flyingLogo.style.top = `${targetRect.top}px`;
-    flyingLogo.style.fontFamily = targetStyle.fontFamily;
-    flyingLogo.style.fontSize = targetStyle.fontSize;
-    flyingLogo.style.fontWeight = targetStyle.fontWeight;
-    flyingLogo.style.letterSpacing = targetStyle.letterSpacing;
-    flyingLogo.style.lineHeight = targetStyle.lineHeight;
+    flyingLogo.style.width = `${targetRect.width}px`;
+    flyingLogo.style.height = `${targetRect.height}px`;
 
     await trackAnimation(
       flyingLogo,
@@ -161,7 +179,7 @@ export function initBuildSequence() {
       { duration: 360, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' },
     );
 
-    await wait(280);
+    await wait(280, currentId);
     if (currentId !== sequenceId) return;
 
     header.classList.add('is-fill');
@@ -186,52 +204,45 @@ export function initBuildSequence() {
 
     header.classList.add('is-logo');
     flyingLogo.style.opacity = '0';
-    await wait(120);
+    await wait(120, currentId);
     header.classList.add('is-details');
-    await wait(360);
+    await wait(360, currentId);
     header.classList.add('is-line');
-    await wait(940);
+    await wait(940, currentId);
 
     finishSequence(currentId);
   };
 
-  const skipSequence = () => {
+  const handleScreenClick = () => {
     if (!isRunning) return;
+
+    if (interactionCount === 0) {
+      interactionCount = 1;
+      speedMultiplier = 2;
+      activeAnimations.forEach((animation) => {
+        animation.playbackRate = 2;
+      });
+      hint.textContent = 'Ещё клик — пропустить';
+      control.setAttribute('aria-label', 'Пропустить вступительную анимацию');
+      return;
+    }
+
     const currentId = sequenceId;
     finishSequence(currentId);
     sequenceId += 1;
   };
 
-  skipButton.addEventListener('click', skipSequence);
-  rebuildButton?.addEventListener('click', () => {
-    document.documentElement.classList.add('motion-enabled');
-
-    try {
-      window.localStorage.setItem(MOTION_KEY, 'enabled');
-    } catch {
-      // The current replay still works when storage is unavailable.
-    }
-
-    void runSequence();
-  });
-
-  let hasSeenIntro = false;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  control.addEventListener('click', handleScreenClick);
 
   try {
-    hasSeenIntro = window.localStorage.getItem(STORAGE_KEY) === 'seen';
     if (window.localStorage.getItem(MOTION_KEY) === 'enabled') {
       document.documentElement.classList.add('motion-enabled');
     }
   } catch {
-    hasSeenIntro = false;
+    // Storage can be unavailable in privacy-restricted contexts.
   }
 
-  if (
-    document.documentElement.classList.contains('build-intro-pending') &&
-    !hasSeenIntro &&
-    !prefersReducedMotion
-  ) {
+  if (document.documentElement.classList.contains('build-intro-pending')) {
     void runSequence();
   } else {
     document.documentElement.classList.remove('build-intro-pending');

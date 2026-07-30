@@ -6,15 +6,9 @@ import Container from '../ui/Container.astro';
   <Container>
     <div class="header-inner">
       <a class="logo" href="/" aria-label="Liyaro — главная">
-        <span data-build-logo-target>LIYARO</span>
-        <small>студия разработки</small>
+        <img src="/brand/liyaro-logo.svg" alt="Liyaro" width="630" height="470" data-build-logo-target />
       </a>
-      <div class="header-actions">
-        <button class="rebuild-button" type="button" data-build-replay>
-          <span aria-hidden="true">↻</span><span class="rebuild-label">Rebuild</span>
-        </button>
-        <a class="contact-link" href="#contact" data-magnet>Написать о задаче <span aria-hidden="true">↘</span></a>
-      </div>
+      <p class="header-message">Независимая студия разработки</p>
     </div>
   </Container>
 </header>
@@ -23,6 +17,7 @@ import Container from '../ui/Container.astro';
   .site-header {
     position: relative;
     z-index: 10;
+    overflow: hidden;
     isolation: isolate;
   }
 
@@ -49,80 +44,50 @@ import Container from '../ui/Container.astro';
   }
 
   .header-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem 3rem;
     min-height: 5rem;
   }
 
   .logo {
-    display: flex;
-    gap: 0.75rem;
-    align-items: baseline;
+    display: block;
+    width: 4.7rem;
     text-decoration: none;
   }
 
-  .logo span {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.04em;
+  .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
-  .logo small {
+  .header-message {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin: 0;
     color: var(--color-text-muted);
-    font-size: 0.64rem;
-    font-weight: 650;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-  }
-
-  .header-actions {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-  }
-
-  .rebuild-button {
-    display: inline-flex;
-    gap: 0.45rem;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-inline: 0.4rem;
-    border: 0;
-    color: var(--color-text-muted);
-    background: transparent;
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 0.68rem;
     font-weight: 650;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.11em;
+    opacity: 0;
+    transform: translate3d(calc(100% + var(--page-padding)), -50%, 0);
     text-transform: uppercase;
-    cursor: pointer;
+    white-space: nowrap;
+    pointer-events: none;
+    transition:
+      opacity 0.4s ease 0.28s,
+      transform 0.62s var(--ease-out) 0.28s;
+    will-change: transform, opacity;
   }
 
-  .rebuild-button > span:first-child {
-    color: var(--color-accent);
-    font-size: 1rem;
-    transition: transform 0.45s var(--ease-out);
-  }
-
-  .rebuild-button:hover > span:first-child {
-    transform: rotate(-160deg);
-  }
-
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-inline: 1rem;
-    border: 1px solid var(--color-text);
-    font-size: 0.94rem;
-    text-decoration: none;
-  }
-
-  .contact-link span {
-    margin-left: 0.6rem;
-    color: var(--color-accent);
+  .site-header:hover .header-message {
+    opacity: 1;
+    transform: translate3d(0, -50%, 0);
+    transition-delay: 0s;
   }
 
   :global(html.is-building) .site-header::before,
@@ -145,30 +110,17 @@ import Container from '../ui/Container.astro';
       opacity 0.22s linear;
   }
 
-  :global(html.is-building) .logo > span,
-  :global(html.is-building) .logo small,
-  :global(html.is-building) .header-actions {
+  :global(html.is-building) .logo > img {
     opacity: 0;
   }
 
-  :global(html.is-building) .logo > span {
+  :global(html.is-building) .header-message {
+    opacity: 0;
+    transform: translate3d(calc(100% + var(--page-padding)), -50%, 0);
+  }
+
+  :global(html.is-building) .logo > img {
     transition: opacity 0.12s linear;
-  }
-
-  :global(html.is-building) .logo small {
-    clip-path: inset(0 100% 0 0);
-    transform: translateX(-0.4rem);
-    transition:
-      opacity 0.45s var(--ease-out),
-      clip-path 0.55s var(--ease-out),
-      transform 0.55s var(--ease-out);
-  }
-
-  :global(html.is-building) .header-actions {
-    transform: translateX(2rem);
-    transition:
-      opacity 0.55s var(--ease-out),
-      transform 0.65s var(--ease-out);
   }
 
   :global(html.is-building) .site-header.is-fill::before,
@@ -180,19 +132,8 @@ import Container from '../ui/Container.astro';
     opacity: 1;
   }
 
-  :global(html.is-building) .site-header.is-logo .logo > span,
-  :global(html.is-building) .site-header.is-details .logo small,
-  :global(html.is-building) .site-header.is-details .header-actions {
+  :global(html.is-building) .site-header.is-logo .logo > img {
     opacity: 1;
-  }
-
-  :global(html.is-building) .site-header.is-details .logo small {
-    clip-path: inset(0);
-    transform: translateX(0);
-  }
-
-  :global(html.is-building) .site-header.is-details .header-actions {
-    transform: translateX(0);
   }
 
   @media (max-width: 30rem) {
@@ -200,24 +141,13 @@ import Container from '../ui/Container.astro';
       padding-block: 1rem;
     }
 
-    .contact-link {
-      padding-inline: 0.75rem;
+    .logo {
+      width: 4.25rem;
     }
 
-    .logo small {
+    .header-message {
       display: none;
     }
 
-    .rebuild-label {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
   }
 </style>

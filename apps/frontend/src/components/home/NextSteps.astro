@@ -1,18 +1,24 @@
 ---
 import Container from '../ui/Container.astro';
 
-const steps = [
+const phases = [
   {
-    title: 'Вы рассказываете ситуацию',
-    description: 'В свободной форме — так, как объяснили бы её знакомому.',
+    kicker: '01 / Вместе',
+    title: 'Понимаем цель',
+    description: 'Что должно измениться — и зачем.',
+    note: 'Контекст',
   },
   {
-    title: 'Разбираемся вместе',
-    description: 'Задаём вопросы и отделяем саму задачу от возможных решений.',
+    kicker: '02 / Согласование',
+    title: 'Фиксируем маршрут',
+    description: 'Этапы, сроки и контрольные точки.',
+    note: 'План подтверждён',
   },
   {
-    title: 'Определяем следующий шаг',
-    description: 'Иногда это разработка. Иногда сначала нужно проверить идею или изменить подход.',
+    kicker: '03 / Реализация',
+    title: 'Делаем под ключ',
+    description: 'Вы — на контрольных точках. Мы — во всей остальной работе.',
+    note: 'Liyaro / Работа',
   },
 ];
 ---
@@ -20,39 +26,34 @@ const steps = [
 <section class="next-steps" aria-labelledby="next-steps-title">
   <Container>
     <div class="heading" data-reveal>
-      <p class="section-label">02 / Что будет дальше</p>
-      <h2 id="next-steps-title">Сначала — обычный разговор</h2>
+      <p class="section-label">02 / Как строится работа</p>
+      <h2 id="next-steps-title">Сначала согласуем маршрут. Дальше — работа под ключ.</h2>
     </div>
 
-    <ol data-steps-sequence>
+    <ol class="scroll-stack" data-scroll-stack>
       {
-        steps.map((step, index) => (
-          <li data-step-motion>
-            <p class="number">0{index + 1}</p>
-            <div>
-              <h3 data-typewriter data-text={step.title} aria-label={step.title}>
-                <span class="typewriter-sizer" aria-hidden="true">{step.title}</span>
-                <span class="typewriter-output" aria-hidden="true">{step.title}</span>
-                <span class="typewriter-caret" aria-hidden="true"></span>
-              </h3>
-              <p class="description" data-blur-text aria-label={step.description}>
-                {
-                  step.description.split(' ').map((word, wordIndex) => (
-                    <span
-                      class="description-word"
-                      aria-hidden="true"
-                      style={`--word-delay: ${wordIndex * 28}ms`}
-                    >
-                      {word}
-                      {wordIndex < step.description.split(' ').length - 1 ? '\u00A0' : ''}
-                    </span>
-                  ))
-                }
-              </p>
+        phases.map((phase, index) => (
+          <li
+            class:list={{
+              'scroll-stack-card': true,
+              'scroll-stack-card--approved': index === 1,
+              'scroll-stack-card--delivery': index === 2,
+            }}
+            data-scroll-stack-card
+            style={`--stack-index: ${index}; --stack-z: ${index + 1};`}
+          >
+            <div class="card-meta">
+              <p class="card-kicker">{phase.kicker}</p>
+              <p class="card-note">{phase.note}</p>
+            </div>
+            <div class="card-copy">
+              <h3>{phase.title}</h3>
+              <p>{phase.description}</p>
             </div>
           </li>
         ))
       }
+      <li class="scroll-stack-end" aria-hidden="true"></li>
     </ol>
   </Container>
 </section>
@@ -60,7 +61,7 @@ const steps = [
 <style>
   .next-steps {
     position: relative;
-    padding-block: var(--section-space);
+    padding-block: var(--section-space) 0;
   }
 
   .next-steps::before {
@@ -77,169 +78,201 @@ const steps = [
     display: grid;
     grid-template-columns: minmax(11rem, 0.45fr) minmax(0, 1fr);
     gap: var(--space-lg);
-    margin-bottom: var(--section-space);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
   }
 
   .section-label,
-  .number {
-    color: var(--color-text-muted);
-    font-size: 0.86rem;
+  .card-kicker,
+  .card-note {
+    font-size: 0.78rem;
     font-weight: 650;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
   }
 
-  ol {
-    list-style: none;
-    border-top: 1px solid var(--color-border);
-  }
-
-  li {
-    display: grid;
-    grid-template-columns: minmax(4rem, 0.2fr) minmax(0, 1fr);
-    gap: var(--space-lg);
-    padding-block: clamp(1.75rem, 4vw, 2.75rem);
-    border-bottom: 1px solid var(--color-border);
-    transition:
-      padding-inline 0.45s var(--ease-out),
-      background 0.45s var(--ease-out);
-  }
-
-  :global(.has-js) li[data-step-motion] .number {
-    opacity: 0.42;
-  }
-
-  li:hover {
-    padding-inline: 1rem;
-    background: rgb(255 255 255 / 0.38);
-  }
-
-  li > div {
-    display: grid;
-    grid-template-columns: minmax(14rem, 0.65fr) minmax(18rem, 1fr);
-    gap: var(--space-lg);
-  }
-
-  h3 {
-    position: relative;
-    width: fit-content;
-  }
-
-  .typewriter-sizer {
-    visibility: visible;
-  }
-
-  .typewriter-output {
-    display: none;
-  }
-
-  :global(.has-js) .typewriter-sizer {
-    visibility: hidden;
-  }
-
-  :global(.has-js) .typewriter-output {
-    position: absolute;
-    inset: 0 auto auto 0;
-    display: inline;
-    white-space: nowrap;
-  }
-
-  .typewriter-caret {
-    display: none;
-  }
-
-  :global(.has-js) .typewriter-caret {
-    position: absolute;
-    top: 50%;
-    bottom: auto;
-    left: var(--caret-position, 0%);
-    display: block;
-    width: 0.52em;
-    height: 2px;
-    margin-left: 0.14em;
-    background: var(--color-accent);
-    opacity: 0;
-    transform: translateY(-50%);
-  }
-
-  :global(.has-js) li.is-typing .typewriter-caret {
-    opacity: 1;
-    animation: caret-pulse 0.72s steps(1, end) infinite;
-  }
-
-  .description {
-    max-width: 34rem;
+  .section-label {
     color: var(--color-text-muted);
   }
 
-  .description-word {
-    display: inline-block;
+  h2 {
+    max-width: 15ch;
   }
 
-  :global(.has-js) .description-word {
-    opacity: 0;
-    filter: blur(6px);
-    transform: translateY(0.4em);
-    transition:
-      opacity 0.42s var(--ease-out),
-      filter 0.42s var(--ease-out),
-      transform 0.42s var(--ease-out);
-    transition-delay: var(--word-delay);
+  .scroll-stack {
+    position: relative;
+    padding-bottom: 32vh;
+    list-style: none;
   }
 
-  :global(.has-js) li.is-described .description-word {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
+  .scroll-stack-card {
+    --stack-scale: 1;
+    position: sticky;
+    z-index: var(--stack-z);
+    top: calc(clamp(5.75rem, 12vh, 8.5rem) + var(--stack-index) * 1.35rem);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: clamp(17rem, 38vh, 21rem);
+    margin-bottom: clamp(7rem, 17vh, 11rem);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    box-shadow: 0 1.5rem 4rem rgb(18 19 17 / 0.08);
+    transform: translateZ(0) scale(var(--stack-scale));
+    transform-origin: top center;
+    backface-visibility: hidden;
+    will-change: transform;
   }
 
-  .number {
+  .scroll-stack-card::before {
+    position: absolute;
+    inset: 0;
+    opacity: 0.32;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(18 19 17 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(18 19 17 / 0.06) 1px, transparent 1px);
+    background-size: clamp(3rem, 6vw, 5rem) clamp(3rem, 6vw, 5rem);
+    content: '';
+  }
+
+  .scroll-stack-card--approved {
+    border-color: rgb(213 79 45 / 0.42);
+    background: var(--color-surface-raised);
+  }
+
+  .scroll-stack-card--delivery {
+    color: var(--color-background);
+    border-color: rgb(255 255 255 / 0.12);
+    background: var(--color-dark);
+    box-shadow: 0 1.75rem 5rem rgb(18 19 17 / 0.16);
+  }
+
+  .scroll-stack-card--delivery::before {
+    opacity: 0.13;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.12) 1px, transparent 1px);
+  }
+
+  .card-meta,
+  .card-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .card-kicker {
     color: var(--color-accent);
-    transition:
-      opacity 0.35s var(--ease-out),
-      transform 0.45s var(--ease-out);
   }
 
-  :global(.has-js) li.is-typing .number,
-  :global(.has-js) li.is-complete .number {
-    opacity: 1;
+  .card-note {
+    color: var(--color-text-muted);
   }
 
-  li:hover .number {
-    transform: translateX(0.35rem);
+  .scroll-stack-card--delivery .card-note {
+    color: rgb(243 240 232 / 0.48);
   }
 
-  @keyframes caret-pulse {
-    0%,
-    48% {
-      opacity: 1;
-    }
+  .card-copy {
+    align-items: end;
+    align-self: end;
+  }
 
-    49%,
-    100% {
-      opacity: 0;
-    }
+  .card-copy h3 {
+    max-width: 10ch;
+    font-size: clamp(2.1rem, 5vw, 4.6rem);
+    font-weight: 580;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .scroll-stack-card--delivery h3 {
+    font-weight: 650;
+  }
+
+  .card-copy p {
+    max-width: 25rem;
+    color: rgb(18 19 17 / 0.7);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 430;
+    line-height: 1.45;
+  }
+
+  .scroll-stack-card--delivery .card-copy p {
+    color: rgb(243 240 232 / 0.72);
+  }
+
+  .scroll-stack-end {
+    height: 1px;
   }
 
   @media (max-width: 44rem) {
-    .heading,
-    li,
-    li > div {
-      grid-template-columns: 1fr;
-    }
-
     .heading {
-      margin-bottom: var(--space-lg);
+      grid-template-columns: 1fr;
+      margin-bottom: 2.75rem;
     }
 
-    li,
-    li > div {
+    h2 {
+      max-width: 12ch;
+    }
+
+    .scroll-stack {
+      padding-bottom: 22vh;
+    }
+
+    .scroll-stack-card {
+      top: calc(5rem + var(--stack-index) * 0.85rem);
+      min-height: 15.5rem;
+      margin-bottom: 25vh;
+      padding: 1.35rem;
+    }
+
+    .card-note {
+      max-width: 9rem;
+      text-align: right;
+    }
+
+    .card-copy {
+      display: grid;
       gap: 1rem;
     }
 
-    :global(.has-js) .typewriter-output {
-      white-space: normal;
+    .card-copy h3 {
+      max-width: 9ch;
+      font-size: clamp(2.2rem, 12vw, 3.25rem);
+    }
+
+    .card-copy p {
+      max-width: 19rem;
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-stack-card {
+      position: relative;
+      top: auto;
+      margin-bottom: 1rem;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    :global(html.motion-enabled) .scroll-stack-card {
+      position: sticky;
+      top: calc(clamp(5.75rem, 12vh, 8.5rem) + var(--stack-index) * 1.35rem);
+      margin-bottom: clamp(7rem, 17vh, 11rem);
+      transform: translateZ(0) scale(var(--stack-scale)) !important;
+      will-change: transform;
+    }
+  }
+
+  @media (max-width: 44rem) and (prefers-reduced-motion: reduce) {
+    :global(html.motion-enabled) .scroll-stack-card {
+      top: calc(5rem + var(--stack-index) * 0.85rem);
+      margin-bottom: 25vh;
+    }
+  }
 </style>
