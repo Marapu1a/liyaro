@@ -1,10 +1,13 @@
 ---
 import Container from '../ui/Container.astro';
+import 'intl-tel-input/styles';
+import { legalDocuments } from '@liyaro/contracts';
 
 const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 ---
 
 <section id="contact" class="contact" aria-labelledby="contact-title">
+  <div class="contact-radiance" data-reveal aria-hidden="true"></div>
   <Container>
     <div class="heading" data-reveal>
       <h2 id="contact-title">Расскажите о задаче</h2>
@@ -13,11 +16,29 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
       </p>
     </div>
 
-    <form id="inquiry-form" data-api-url={apiUrl} data-reveal style="--reveal-delay: 120ms">
+    <form
+      id="inquiry-form"
+      data-api-url={apiUrl}
+      data-consent-version={legalDocuments.consentVersion}
+      data-form-id={legalDocuments.inquiryFormId}
+      data-reveal
+      style="--reveal-delay: 120ms"
+      novalidate
+    >
       <div class="field field-wide">
         <label for="message">Что происходит сейчас? Что хочется сделать или изменить?</label>
-        <textarea id="message" name="message" rows="7" minlength="10" maxlength="5000" required
+        <textarea
+          id="message"
+          name="message"
+          rows="7"
+          minlength="10"
+          maxlength="5000"
+          placeholder="Можно своими словами — готовое техническое задание не требуется."
+          aria-describedby="message-error"
+          spellcheck="true"
+          required
         ></textarea>
+        <p id="message-error" class="field-error" data-field-error="message" aria-live="polite"></p>
       </div>
 
       <fieldset class="field field-wide">
@@ -30,22 +51,68 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
         </div>
       </fieldset>
 
-      <div class="field">
-        <label for="contact-value">Ваш контакт</label>
-        <input
-          id="contact-value"
-          name="contact"
-          type="text"
-          maxlength="254"
-          placeholder="@username или номер телефона"
-          autocomplete="off"
-          required
-        />
+      <div class="field contact-field">
+        <div class="contact-control" data-contact-control="telegram">
+          <label for="contact-telegram">Ваш Telegram</label>
+          <input
+            id="contact-telegram"
+            name="contactTelegram"
+            type="text"
+            maxlength="64"
+            pattern="(?:@?[A-Za-z0-9_]{5,32}|(?:https?://)?(?:t\.me|telegram\.me)/[A-Za-z0-9_]{5,32})"
+            placeholder="@username или t.me/username"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+            aria-describedby="contact-error"
+            required
+          />
+        </div>
+
+        <div class="contact-control" data-contact-control="email">
+          <label for="contact-email">Ваш Email</label>
+          <input
+            id="contact-email"
+            name="contactEmail"
+            type="email"
+            maxlength="254"
+            placeholder="name@example.com"
+            autocomplete="email"
+            inputmode="email"
+            autocapitalize="none"
+            spellcheck="false"
+            aria-describedby="contact-error"
+          />
+        </div>
+
+        <div class="contact-control phone-control" data-contact-control="phone">
+          <label for="contact-phone" data-phone-label="whatsapp">Номер WhatsApp</label>
+          <label for="contact-phone" data-phone-label="phone">Номер телефона</label>
+          <input
+            id="contact-phone"
+            name="contactPhone"
+            type="tel"
+            autocomplete="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            aria-describedby="contact-error"
+          />
+        </div>
+        <p id="contact-error" class="field-error" data-field-error="contact" aria-live="polite"></p>
       </div>
 
       <div class="field">
         <label for="name">Как к вам обращаться <span>(необязательно)</span></label>
-        <input id="name" name="name" type="text" maxlength="100" autocomplete="name" />
+        <input
+          id="name"
+          name="name"
+          type="text"
+          maxlength="100"
+          autocomplete="name"
+          autocapitalize="words"
+          aria-describedby="name-error"
+        />
+        <p id="name-error" class="field-error" data-field-error="name" aria-live="polite"></p>
       </div>
 
       <div class="website-field" aria-hidden="true">
@@ -53,9 +120,27 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
         <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
 
+      <div class="consent-field field-wide">
+        <label for="consent">
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            aria-describedby="consent-error"
+            required
+          />
+          <span>Даю <a href="/consent" target="_blank" rel="noopener">согласие на обработку персональных данных</a>.</span>
+        </label>
+        <p>Подробнее о порядке обработки — в <a href="/privacy" target="_blank" rel="noopener">политике</a>.</p>
+        <p id="consent-error" class="field-error" data-field-error="consent" aria-live="polite"></p>
+      </div>
+
       <div class="form-footer field-wide">
         <p>Контакт используем только для ответа на это сообщение.</p>
-        <button type="submit" data-magnet data-magnet-strength="0.14">Отправить сообщение <span aria-hidden="true">↗</span></button>
+        <button type="submit" data-magnet data-magnet-strength="0.14">
+          <span class="submit-label" data-submit-label>Отправить сообщение</span>
+          <span class="submit-arrow" aria-hidden="true">↗</span>
+        </button>
       </div>
 
       <p id="form-status" class="form-status field-wide" aria-live="polite"></p>
@@ -64,55 +149,326 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 </section>
 
 <script>
+  import type { Iti } from 'intl-tel-input';
+
+  type ContactMethod = 'telegram' | 'whatsapp' | 'email' | 'phone';
+  type FieldName = 'message' | 'contact' | 'name' | 'consent';
+  type ValidationIssue = { path: PropertyKey[]; message: string };
+
   const form = document.querySelector<HTMLFormElement>('#inquiry-form');
 
   if (form) {
-    const contactInput = form.querySelector<HTMLInputElement>('#contact-value');
+    const messageInput = form.querySelector<HTMLTextAreaElement>('#message');
+    const contactTelegramInput = form.querySelector<HTMLInputElement>('#contact-telegram');
+    const contactEmailInput = form.querySelector<HTMLInputElement>('#contact-email');
+    const contactPhoneInput = form.querySelector<HTMLInputElement>('#contact-phone');
+    const nameInput = form.querySelector<HTMLInputElement>('#name');
+    const consentInput = form.querySelector<HTMLInputElement>('#consent');
     const status = form.querySelector<HTMLElement>('#form-status');
     const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]');
     const methodInputs = form.querySelectorAll<HTMLInputElement>('input[name="contactMethod"]');
+    const errorElements = new Map(
+      Array.from(form.querySelectorAll<HTMLElement>('[data-field-error]')).map((element) => [
+        element.dataset.fieldError ?? '',
+        element,
+      ]),
+    );
 
-    const contactSettings = {
-      telegram: { type: 'text', placeholder: '@username или номер телефона', autocomplete: 'off' },
-      whatsapp: { type: 'tel', placeholder: '+7 999 000-00-00', autocomplete: 'tel' },
-      email: { type: 'email', placeholder: 'name@example.com', autocomplete: 'email' },
-      phone: { type: 'tel', placeholder: '+7 999 000-00-00', autocomplete: 'tel' },
-    } as const;
+    const fields = new Map<string, HTMLInputElement | HTMLTextAreaElement | null>([
+      ['message', messageInput as HTMLTextAreaElement],
+      ['name', nameInput as HTMLInputElement],
+      ['consent', consentInput as HTMLInputElement],
+    ]);
 
-    const updateContactInput = () => {
+    let phoneControl: Iti | null = null;
+    let phoneControlPromise: Promise<Iti> | null = null;
+    let lastAllowedPhoneValue = '';
+    let phoneInputIssueOverride: 'too_long' | null = null;
+    let activeMethod: ContactMethod = 'telegram';
+
+    const telegramPattern = /^(?:@?[A-Za-z0-9_]{5,32}|(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?)$/i;
+
+    const getSelectedMethod = (): ContactMethod => {
       const method = form.querySelector<HTMLInputElement>('input[name="contactMethod"]:checked');
-      const settings = method
-        ? contactSettings[method.value as keyof typeof contactSettings]
-        : contactSettings.telegram;
+      return method && ['telegram', 'whatsapp', 'email', 'phone'].includes(method.value)
+        ? (method.value as ContactMethod)
+        : 'telegram';
+    };
 
-      if (contactInput) {
-        contactInput.type = settings.type;
-        contactInput.placeholder = settings.placeholder;
-        contactInput.autocomplete = settings.autocomplete;
+    const isPhoneMethod = (method: ContactMethod) => method === 'phone' || method === 'whatsapp';
+
+    const getContactInput = (method = getSelectedMethod()) => {
+      if (isPhoneMethod(method)) return contactPhoneInput;
+      return method === 'email' ? contactEmailInput : contactTelegramInput;
+    };
+
+    const getField = (fieldName: string) => {
+      if (fieldName === 'contact') {
+        return getContactInput();
+      }
+      return fields.get(fieldName) ?? null;
+    };
+
+    const clearFieldError = (fieldName: string) => {
+      errorElements.get(fieldName)?.replaceChildren();
+      if (fieldName === 'contact') {
+        contactTelegramInput?.removeAttribute('aria-invalid');
+        contactEmailInput?.removeAttribute('aria-invalid');
+        contactPhoneInput?.removeAttribute('aria-invalid');
+        return;
+      }
+      getField(fieldName)?.removeAttribute('aria-invalid');
+    };
+
+    const setFieldError = (fieldName: string, message: string) => {
+      const error = errorElements.get(fieldName);
+      const field = getField(fieldName);
+      if (error) error.textContent = message;
+      field?.setAttribute('aria-invalid', 'true');
+    };
+
+    const clearErrors = () => {
+      errorElements.forEach((_, fieldName) => clearFieldError(fieldName));
+      if (status) {
+        status.textContent = '';
+        status.dataset.state = '';
       }
     };
 
-    methodInputs.forEach((input) => input.addEventListener('change', updateContactInput));
+    const getContactValue = () => {
+      const method = getSelectedMethod();
+      if (isPhoneMethod(method)) {
+        const rawValue = contactPhoneInput?.value ?? '';
+        return phoneControl?.getNumber() || rawValue;
+      }
+      const value = getContactInput(method)?.value.trim() ?? '';
+      if (method === 'email') return value.toLowerCase();
+      if (method === 'telegram') {
+        const linkMatch = /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/([A-Za-z0-9_]{5,32})\/?$/i.exec(value);
+        return `@${linkMatch?.[1] ?? value.replace(/^@/, '')}`;
+      }
+      return value;
+    };
+
+    const getPayload = () => ({
+      message: messageInput?.value ?? '',
+      contactMethod: getSelectedMethod(),
+      contact: getContactValue(),
+      name: nameInput?.value ?? '',
+      consent: consentInput?.checked ?? false,
+      consentVersion: form.dataset.consentVersion ?? '',
+      formId: form.dataset.formId ?? '',
+      website: form.querySelector<HTMLInputElement>('#website')?.value ?? '',
+    });
+
+    const getPhoneValidationMessage = (includeIncomplete: boolean) => {
+      if (!isPhoneMethod(getSelectedMethod())) return null;
+      if (!contactPhoneInput?.value.trim()) return includeIncomplete ? 'Укажите номер телефона.' : null;
+      if (phoneInputIssueOverride === 'too_long') return 'Слишком много цифр для выбранной страны.';
+      if (!phoneControl || phoneControl.isValidNumber()) return null;
+      return includeIncomplete ? 'Проверьте код оператора и номер.' : null;
+    };
+
+    const enforcePhoneLength = () => {
+      if (!contactPhoneInput) return;
+
+      const validationError = phoneControl?.getValidationError();
+      if (validationError === 3) {
+        contactPhoneInput.value = lastAllowedPhoneValue;
+        phoneInputIssueOverride = 'too_long';
+        setFieldError('contact', 'Слишком много цифр для выбранной страны.');
+        return;
+      }
+
+      phoneInputIssueOverride = null;
+      lastAllowedPhoneValue = contactPhoneInput.value;
+      if (contactPhoneInput.hasAttribute('aria-invalid')) {
+        const message = getPhoneValidationMessage(false);
+        if (message) setFieldError('contact', message);
+        else clearFieldError('contact');
+      }
+    };
+
+    const renderValidationErrors = (issues: ReadonlyArray<ValidationIssue>) => {
+      const renderedFields = new Set<string>();
+
+      issues.forEach((issue) => {
+        const fieldName = String(issue.path[0] ?? '');
+        if (!renderedFields.has(fieldName) && errorElements.has(fieldName)) {
+          setFieldError(fieldName, issue.message);
+          renderedFields.add(fieldName);
+        }
+      });
+
+      const firstInvalid = ['message', 'contact', 'name', 'consent'].find((fieldName) =>
+        renderedFields.has(fieldName),
+      );
+      getField(firstInvalid ?? '')?.focus();
+    };
+
+    const getValidationIssues = (): ValidationIssue[] => {
+      const issues: ValidationIssue[] = [];
+      const message = messageInput?.value.trim() ?? '';
+      const method = getSelectedMethod();
+      const contact = getContactInput(method)?.value.trim() ?? '';
+      const name = nameInput?.value.trim() ?? '';
+
+      if (message.length < 10) {
+        issues.push({ path: ['message'], message: 'Расскажите чуть подробнее — хотя бы 10 символов' });
+      } else if (message.length > 5000) {
+        issues.push({ path: ['message'], message: 'Сообщение не должно быть длиннее 5000 символов' });
+      }
+
+      if (isPhoneMethod(method)) {
+        const phoneMessage = getPhoneValidationMessage(true);
+        if (phoneMessage) issues.push({ path: ['contact'], message: phoneMessage });
+      } else if (!contact) {
+        issues.push({ path: ['contact'], message: 'Укажите, куда вам ответить' });
+      } else if (method === 'email' && contactEmailInput?.validity.typeMismatch) {
+        issues.push({ path: ['contact'], message: 'Проверьте адрес электронной почты' });
+      } else if (method === 'telegram' && !telegramPattern.test(contact)) {
+        issues.push({ path: ['contact'], message: 'Укажите @username или ссылку вида t.me/username' });
+      }
+
+      if (name.length > 100) issues.push({ path: ['name'], message: 'Не больше 100 символов' });
+      if (!consentInput?.checked) {
+        issues.push({ path: ['consent'], message: 'Необходимо согласие на обработку персональных данных' });
+      }
+      return issues;
+    };
+
+    const validateField = (fieldName: FieldName) => {
+      clearFieldError(fieldName);
+      const issue = getValidationIssues().find((candidate) => candidate.path[0] === fieldName);
+      if (issue) setFieldError(fieldName, issue.message);
+    };
+
+    const ensurePhoneControl = async () => {
+      if (!contactPhoneInput) return null;
+      if (phoneControl) return phoneControl;
+
+      if (!phoneControlPromise) {
+        contactPhoneInput.readOnly = true;
+        contactPhoneInput.setAttribute('aria-busy', 'true');
+        phoneControlPromise = (async () => {
+          const [intlTelInputModule, { ru }] = await Promise.all([
+            import('intl-tel-input'),
+            import('intl-tel-input/i18n'),
+          ]);
+          const instance = intlTelInputModule.default(contactPhoneInput, {
+            initialCountry: 'ru',
+            countryOrder: ['ru', 'kz', 'by', 'am', 'kg', 'uz'],
+            countrySearch: true,
+            separateDialCode: true,
+            strictMode: true,
+            formatAsYouType: true,
+            placeholderNumberType: 'MOBILE',
+            i18n: ru,
+            loadUtils: () => import('intl-tel-input/utils'),
+          });
+          await instance.promise;
+          phoneControl = instance;
+          lastAllowedPhoneValue = contactPhoneInput.value;
+          enforcePhoneLength();
+          return instance;
+        })().finally(() => {
+          contactPhoneInput.readOnly = false;
+          contactPhoneInput.removeAttribute('aria-busy');
+        });
+      }
+
+      return phoneControlPromise;
+    };
+
+    const updateContactInput = async () => {
+      activeMethod = getSelectedMethod();
+      clearFieldError('contact');
+      if (isPhoneMethod(activeMethod)) await ensurePhoneControl();
+    };
+
+    const activateContactMethod = () => {
+      void updateContactInput().catch(() => {
+        setFieldError('contact', 'Не удалось загрузить выбор страны. Обновите страницу.');
+      });
+    };
+
+    const sanitizeTelegramInput = () => {
+      if (!contactTelegramInput) return;
+      const sanitized = contactTelegramInput.value.replace(/[^A-Za-z0-9_@.:/]/g, '');
+      if (sanitized !== contactTelegramInput.value) contactTelegramInput.value = sanitized;
+    };
+
+    const sanitizePhoneInput = () => {
+      if (!contactPhoneInput) return;
+      const digitsOnly = contactPhoneInput.value.replace(/\D/g, '');
+      if (digitsOnly !== contactPhoneInput.value) contactPhoneInput.value = digitsOnly;
+      enforcePhoneLength();
+    };
+
+    contactTelegramInput?.addEventListener('beforeinput', (event) => {
+      if (event.data && /[^A-Za-z0-9_@.:/]/.test(event.data)) event.preventDefault();
+    });
+    contactTelegramInput?.addEventListener('input', sanitizeTelegramInput);
+    contactPhoneInput?.addEventListener('beforeinput', (event) => {
+      if (event.data && /\D/.test(event.data)) event.preventDefault();
+    });
+    contactPhoneInput?.addEventListener('input', sanitizePhoneInput);
+
+    methodInputs.forEach((input) => input.addEventListener('change', activateContactMethod));
+    messageInput?.addEventListener('blur', () => validateField('message'));
+    contactTelegramInput?.addEventListener('blur', () => validateField('contact'));
+    contactEmailInput?.addEventListener('blur', () => validateField('contact'));
+    contactPhoneInput?.addEventListener('blur', () => validateField('contact'));
+    contactPhoneInput?.addEventListener('countrychange', () => {
+      enforcePhoneLength();
+      if (contactPhoneInput.value) validateField('contact');
+    });
+    nameInput?.addEventListener('blur', () => validateField('name'));
+    consentInput?.addEventListener('change', () => validateField('consent'));
+
+    const validatedFields: Array<[FieldName, HTMLInputElement | HTMLTextAreaElement | null]> = [
+      ['message', messageInput],
+      ['contact', contactTelegramInput],
+      ['contact', contactEmailInput],
+      ['name', nameInput],
+      ['consent', consentInput],
+    ];
+
+    validatedFields.forEach(([fieldName, field]) => {
+      field?.addEventListener('input', () => {
+        if (field.hasAttribute('aria-invalid')) validateField(fieldName);
+      });
+    });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      if (!form.reportValidity() || !status || !submitButton) {
+      if (!status || !submitButton || !submitLabel) return;
+
+      clearErrors();
+      if (isPhoneMethod(getSelectedMethod())) {
+        try {
+          await ensurePhoneControl();
+        } catch {
+          setFieldError('contact', 'Не удалось загрузить выбор страны. Обновите страницу.');
+          status.textContent = 'Не удалось подготовить поле телефона.';
+          status.dataset.state = 'error';
+          return;
+        }
+      }
+      const validationIssues = getValidationIssues();
+      if (validationIssues.length > 0) {
+        renderValidationErrors(validationIssues);
+        status.textContent = 'Проверьте выделенные поля.';
+        status.dataset.state = 'error';
         return;
       }
 
-      const formData = new FormData(form);
-      const name = formData.get('name');
-      const payload = {
-        message: formData.get('message'),
-        contactMethod: formData.get('contactMethod'),
-        contact: formData.get('contact'),
-        website: formData.get('website'),
-        ...(typeof name === 'string' && name.trim() ? { name } : {}),
-      };
+      const payload = getPayload();
 
       submitButton.disabled = true;
-      submitButton.textContent = 'Отправляем…';
+      submitLabel.textContent = 'Отправляем…';
       status.textContent = '';
       status.dataset.state = '';
 
@@ -123,12 +479,24 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
           body: JSON.stringify(payload),
         });
 
+        if (response.status === 400) {
+          const problem = (await response.json().catch(() => null)) as
+            | { details?: Array<{ path: PropertyKey[]; message: string }> }
+            | null;
+          if (problem?.details) renderValidationErrors(problem.details);
+          status.textContent = 'Проверьте выделенные поля.';
+          status.dataset.state = 'error';
+          return;
+        }
+
         if (!response.ok) {
           throw new Error('Request failed');
         }
 
         form.reset();
-        updateContactInput();
+        phoneControl?.setNumber('');
+        activeMethod = 'telegram';
+        await updateContactInput();
         status.textContent = 'Сообщение отправлено. Ответим туда, куда вы указали.';
         status.dataset.state = 'success';
       } catch {
@@ -136,7 +504,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
         status.dataset.state = 'error';
       } finally {
         submitButton.disabled = false;
-        submitButton.textContent = 'Отправить сообщение';
+        submitLabel.textContent = 'Отправить сообщение';
       }
     });
   }
@@ -148,20 +516,57 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     padding-block: var(--section-space);
     color: var(--color-background);
     background:
-      radial-gradient(circle at 82% 18%, rgb(213 79 45 / 0.2), transparent 26rem),
+      radial-gradient(circle at 94% 8%, rgb(213 79 45 / 0.16), transparent 28rem),
       var(--color-dark);
     overflow: hidden;
   }
 
-  .contact::before {
+  .contact :global(.container) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-radiance {
     position: absolute;
-    top: 5rem;
-    right: -7rem;
-    width: 18rem;
-    height: 18rem;
-    border: 1px solid rgb(245 243 239 / 0.16);
-    border-radius: 50%;
-    content: '';
+    inset: 0;
+    background: conic-gradient(
+      at 103% -4%,
+      transparent 0deg 184deg,
+      rgb(245 243 239 / 0.055) 190deg,
+      rgb(213 79 45 / 0.1) 198deg,
+      transparent 207deg 218deg,
+      rgb(245 243 239 / 0.045) 225deg,
+      rgb(213 79 45 / 0.075) 232deg,
+      transparent 241deg 251deg,
+      rgb(245 243 239 / 0.035) 256deg,
+      transparent 264deg
+    );
+    opacity: 0.72;
+    pointer-events: none;
+    transform-origin: top right;
+    transition: opacity 500ms ease;
+    -webkit-mask-image: radial-gradient(ellipse 82% 72% at 100% 0%, #000 0%, rgb(0 0 0 / 0.82) 42%, transparent 78%);
+    mask-image: radial-gradient(ellipse 82% 72% at 100% 0%, #000 0%, rgb(0 0 0 / 0.82) 42%, transparent 78%);
+  }
+
+  :global(.has-js) .contact-radiance[data-reveal] {
+    filter: blur(16px);
+    opacity: 0;
+    transform: translate3d(3rem, -1.5rem, 0) scale(0.98);
+    transition:
+      opacity 1100ms ease,
+      filter 1100ms ease,
+      transform 1100ms var(--ease-out);
+  }
+
+  :global(.has-js) .contact-radiance[data-reveal].is-visible {
+    filter: blur(0);
+    opacity: 0.72;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  :global(.has-js) .contact:focus-within .contact-radiance[data-reveal].is-visible {
+    opacity: 0.9;
   }
 
   .heading {
@@ -192,6 +597,28 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 
   .field-wide {
     grid-column: 1 / -1;
+  }
+
+  .contact-control,
+  [data-phone-label] {
+    display: none;
+  }
+
+  form:has(input[value='telegram']:checked) [data-contact-control='telegram'],
+  form:has(input[value='email']:checked) [data-contact-control='email'],
+  form:has(input[value='whatsapp']:checked) [data-contact-control='phone'],
+  form:has(input[value='phone']:checked) [data-contact-control='phone'] {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  form:has(input[value='whatsapp']:checked) [data-phone-label='whatsapp'],
+  form:has(input[value='phone']:checked) [data-phone-label='phone'] {
+    display: block;
+  }
+
+  .phone-control {
+    min-width: 0;
   }
 
   label,
@@ -230,6 +657,11 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     color: #8e8b87;
   }
 
+  input[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
+    border-color: #ef8d73;
+  }
+
   input:focus-visible,
   textarea:focus-visible,
   button:focus-visible {
@@ -241,6 +673,49 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     margin: 0;
     padding: 0;
     border: 0;
+  }
+
+  .field-error {
+    min-height: 1.15rem;
+    margin: 0;
+    color: #ef8d73;
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .contact :global(.iti) {
+    width: 100%;
+    --iti-border-color: #5b5a5d;
+    --iti-dropdown-bg: #1a1c1c;
+    --iti-hover-color: rgb(245 243 239 / 0.09);
+    --iti-icon-color: #c9c6c0;
+  }
+
+  .contact :global(.iti input) {
+    padding-left: 6.5rem;
+  }
+
+  .contact :global(.iti__selected-country-primary) {
+    background: transparent;
+  }
+
+  .contact :global(.iti__dropdown-content) {
+    color: var(--color-background);
+    border: 1px solid #5b5a5d;
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.35);
+  }
+
+  .contact :global(.iti__search-input) {
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    border: 1px solid #5b5a5d;
+    color: var(--color-background);
+    background: var(--color-dark);
+  }
+
+  .contact :global(.iti__country-name),
+  .contact :global(.iti__dial-code) {
+    color: inherit;
   }
 
   .contact-methods {
@@ -305,7 +780,43 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     cursor: pointer;
   }
 
-  button span {
+  .consent-field {
+    gap: 0.35rem;
+  }
+
+  .consent-field > label {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    max-width: 48rem;
+    cursor: pointer;
+  }
+
+  .consent-field input {
+    flex: 0 0 auto;
+    width: 1.15rem;
+    min-height: 1.15rem;
+    margin-top: 0.2rem;
+    accent-color: var(--color-accent);
+  }
+
+  .consent-field > p:not(.field-error) {
+    margin-left: 1.9rem;
+    color: #9d9a96;
+    font-size: 0.86rem;
+  }
+
+  .consent-field a {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .consent-field input[aria-invalid='true'] {
+    outline: 2px solid #ef8d73;
+    outline-offset: 3px;
+  }
+
+  .submit-arrow {
     margin-left: 0.65rem;
     color: var(--color-accent);
   }
@@ -335,7 +846,25 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     clip-path: inset(50%);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    :global(.has-js) .contact-radiance[data-reveal],
+    :global(.has-js) .contact-radiance[data-reveal].is-visible {
+      filter: none;
+      opacity: 0.72;
+      transform: none;
+      transition: none;
+    }
+
+    :global(.has-js) .contact:focus-within .contact-radiance[data-reveal].is-visible {
+      opacity: 0.72;
+    }
+  }
+
   @media (max-width: 48rem) {
+    .contact-radiance {
+      display: none;
+    }
+
     .heading,
     form {
       grid-template-columns: 1fr;

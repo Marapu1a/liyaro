@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Liyaro">
-  <rect width="64" height="64" fill="#111" />
-  <path d="M20 14v36h25v-8H29V14z" fill="#fff" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="364 221 304 304" role="img" aria-label="Liyaro">
+  <style>
+    path { fill: #111311; }
+    @media (prefers-color-scheme: dark) {
+      path { fill: #f5f3ef; }
+    }
+  </style>
+  <g transform="translate(0 1024) scale(.1 -.1)">
+    <path d="M4297 7869c-49-29-47 25-47-1360v-1291l34-34 34-34h841c893 0 887 0 905 45 10 27 6 79-7 96-30 39-33 39-826 39-751 0-771 0-781 19-7 13-10 418-10 1241 0 819-3 1228-10 1241-22 39-94 61-133 38z" />
+    <path d="M5491 6796c-13-7-69-63-125-123-534-580-654-711-669-733-9-13-17-42-17-63 0-85 103-128 179-74 42 29 875 898 884 921 11 29 8 45-13 66-17 17-33 20-117 20-62-1-107-6-122-14z" />
+  </g>
 </svg>

@@ -5,10 +5,13 @@ interface Props {
   title: string;
   description: string;
   canonicalPath?: string;
+  buildIntro?: boolean;
 }
 
-const { title, description, canonicalPath = Astro.url.pathname } = Astro.props;
+const { title, description, canonicalPath = Astro.url.pathname, buildIntro = false } = Astro.props;
 const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
+const yandexVerification = import.meta.env.YANDEX_SITE_VERIFICATION?.trim();
+const googleVerification = import.meta.env.GOOGLE_SITE_VERIFICATION?.trim();
 ---
 
 <!doctype html>
@@ -19,7 +22,9 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" sizes="any" />
+    {yandexVerification && <meta name="yandex-verification" content={yandexVerification} />}
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Liyaro" />
@@ -30,19 +35,46 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <script is:inline>
+    <script is:inline define:vars={{ buildIntro }}>
+      const introSessionKey = 'liyaro:intro:seen';
+      let shouldPlayIntro = buildIntro;
+
+      if (shouldPlayIntro) {
+        try {
+          shouldPlayIntro = window.sessionStorage.getItem(introSessionKey) !== 'true';
+          if (shouldPlayIntro) window.sessionStorage.setItem(introSessionKey, 'true');
+        } catch {
+          // The intro still works when storage is unavailable.
+        }
+      }
+
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      if (shouldPlayIntro) {
+        window.scrollTo(0, 0);
+        window.addEventListener('pageshow', () => window.scrollTo(0, 0), { once: true });
+      }
       document.documentElement.classList.add('has-js');
-      document.documentElement.classList.add('build-intro-pending');
-      window.setTimeout(() => document.documentElement.classList.remove('build-intro-pending'), 5000);
+      if (shouldPlayIntro) {
+        document.documentElement.classList.add('build-intro-pending');
+        window.setTimeout(() => document.documentElement.classList.remove('build-intro-pending'), 5000);
+      }
+      window.__LIYARO_SHOULD_PLAY_INTRO__ = shouldPlayIntro;
     </script>
   </head>
-  <body>
+  <body data-build-intro={buildIntro ? 'true' : 'false'}>
     <slot />
     <script>
-      import { initBuildSequence } from '../scripts/buildSequence';
       import { initInteractions } from '../scripts/interactions';
 
-      initBuildSequence();
+      if (
+        document.body.dataset.buildIntro === 'true' &&
+        window.__LIYARO_SHOULD_PLAY_INTRO__ === true
+      ) {
+        const { initBuildSequence } = await import('../scripts/buildSequence');
+        initBuildSequence();
+      }
       initInteractions();
     </script>
   </body>

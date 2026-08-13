@@ -1,137 +1,554 @@
 ---
 import Container from '../ui/Container.astro';
 
-const messages = [
-  { label: 'Автоматизация', text: 'Работаем уже несколько лет. Хочется уйти от Excel, но не понимаем, с чего начать.' },
-  { label: 'Новый сервис', text: 'Есть идея сервиса. Пока вообще непонятно, стоит ли её делать.' },
-  { label: 'Рост', text: 'Хотим расширить бизнес. Кажется, без собственной системы уже не получится.' },
-  { label: 'Аудит', text: 'Есть существующий проект. Нужно понять, дорабатывать его или проще сделать иначе.' },
+const capabilities = [
+  {
+    id: 'web',
+    number: '01',
+    name: 'Сайты и магазины',
+    title: 'От первого экрана до оформленного заказа',
+    description:
+      'Лендинги, корпоративные сайты, каталоги и магазины — быстрые, понятные и готовые к развитию.',
+    examples: ['Лендинги', 'Каталоги', 'Интернет-магазины'],
+    path: 'M58 148 H192 V92 H344 V148 H500 V204 H658',
+    nodes: [
+      { x: 58, y: 148, label: 'ВХОД' },
+      { x: 192, y: 92, label: 'ИНТЕРФЕЙС' },
+      { x: 344, y: 148, label: 'КАТАЛОГ' },
+      { x: 500, y: 204, label: 'КОРЗИНА' },
+      { x: 658, y: 204, label: 'ЗАКАЗ' },
+    ],
+  },
+  {
+    id: 'systems',
+    number: '02',
+    name: 'Внутренние системы',
+    title: 'Логика бизнеса в одном рабочем пространстве',
+    description:
+      'CRM, кабинеты, реестры и админки со сложными ролями, документами, расчётами и статусами.',
+    examples: ['CRM и кабинеты', 'Реестры', 'Кастомные админки'],
+    path: 'M58 92 H190 V160 H344 V92 H500 V160 H658',
+    nodes: [
+      { x: 58, y: 92, label: 'РОЛЬ' },
+      { x: 190, y: 160, label: 'ДОКУМЕНТ' },
+      { x: 344, y: 92, label: 'ПРАВИЛО' },
+      { x: 500, y: 160, label: 'СТАТУС' },
+      { x: 658, y: 160, label: 'РЕЕСТР' },
+    ],
+  },
+  {
+    id: 'automation',
+    number: '03',
+    name: 'Автоматизация',
+    title: 'Ручная рутина становится работающим процессом',
+    description:
+      'Связываем сервисы, обрабатываем данные и автоматизируем повторяемые операции без лишних действий.',
+    examples: ['Парсеры', 'Excel и CSV', 'API и интеграции'],
+    path: 'M58 158 H184 L258 92 H408 L482 216 H658',
+    nodes: [
+      { x: 58, y: 158, label: 'ДАННЫЕ' },
+      { x: 184, y: 158, label: 'ИМПОРТ' },
+      { x: 258, y: 92, label: 'ПРОВЕРКА' },
+      { x: 408, y: 92, label: 'РАСЧЁТ' },
+      { x: 482, y: 216, label: 'СИНХРОНИЗАЦИЯ' },
+      { x: 658, y: 216, label: 'РЕЗУЛЬТАТ' },
+    ],
+  },
+  {
+    id: 'apps',
+    number: '04',
+    name: 'Боты и приложения',
+    title: 'Нужный инструмент в привычном формате',
+    description:
+      'Telegram-боты, Mini Apps, мобильные и desktop-программы, подключённые к общей бизнес-логике.',
+    examples: ['Telegram', 'Mobile', 'Desktop'],
+    path: 'M58 150 H196 V88 H348 V212 H500 V150 H658',
+    nodes: [
+      { x: 58, y: 150, label: 'СООБЩЕНИЕ' },
+      { x: 196, y: 88, label: 'БОТ' },
+      { x: 348, y: 212, label: 'API' },
+      { x: 500, y: 150, label: 'ЛОГИКА' },
+      { x: 658, y: 150, label: 'ОТВЕТ' },
+    ],
+  },
+  {
+    id: 'repair',
+    number: '05',
+    name: 'Доработка проектов',
+    title: 'Чиним, обновляем, развиваем',
+    description:
+      'Находим проблемное место, исправляем его и развиваем проект дальше — без бессмысленной полной пересборки.',
+    examples: ['Аудит', 'Исправления', 'Развитие'],
+    path: 'M58 96 H214 V202 H374 V96 H520 V150 H658',
+    nodes: [
+      { x: 58, y: 96, label: 'ПРОЕКТ' },
+      { x: 214, y: 202, label: 'ДИАГНОСТИКА' },
+      { x: 374, y: 96, label: 'МОДУЛЬ' },
+      { x: 520, y: 150, label: 'ПРОВЕРКА' },
+      { x: 658, y: 150, label: 'РЕЛИЗ' },
+    ],
+  },
 ];
 ---
 
-<section class="situations" aria-labelledby="situations-title">
+<section class="capabilities" aria-labelledby="capabilities-title" data-capabilities>
   <Container>
     <div class="heading" data-reveal>
-      <p class="section-label">01 / Можно написать как есть</p>
-      <h2 id="situations-title">Необязательно формулировать техническую задачу</h2>
+      <p class="section-label">02 / Что можем сделать</p>
+      <div class="heading-copy">
+        <h2 id="capabilities-title">Что можем собрать</h2>
+        <p>Проектируем интерфейс, данные и логику как единую систему.</p>
+      </div>
     </div>
 
-    <div class="messages">
-      {messages.map((message, index) => (
-        <blockquote data-spotlight-card data-reveal style={`--reveal-delay: ${index * 70}ms`}>
-          <p class="message-label"><span>0{index + 1}</span>{message.label}</p>
-          <p>{message.text}</p>
-        </blockquote>
-      ))}
+    <div class="showcase" data-reveal style="--reveal-delay: 90ms">
+      <div class="capability-list" role="tablist" aria-label="Направления разработки">
+        {capabilities.map((capability, index) => (
+          <button
+            class:list={['capability-button', { 'is-active': index === 0 }]}
+            type="button"
+            role="tab"
+            id={`capability-tab-${capability.id}`}
+            aria-controls={`capability-panel-${capability.id}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            tabindex={index === 0 ? 0 : -1}
+            data-capability-tab={capability.id}
+          >
+            <span>{capability.number}</span>
+            <strong>{capability.name}</strong>
+            <span class="button-mark" aria-hidden="true">↗</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="workspace" aria-live="polite">
+        <div class="workspace-meta" aria-hidden="true">
+          <span>SYSTEM / CAPABILITIES</span>
+          <span data-capability-counter>01 — 05</span>
+        </div>
+
+        <div class="panel-stack">
+          {capabilities.map((capability, index) => (
+            <article
+              class:list={['capability-panel', { 'is-active': index === 0 }]}
+              id={`capability-panel-${capability.id}`}
+              role="tabpanel"
+              aria-labelledby={`capability-tab-${capability.id}`}
+              aria-hidden={index === 0 ? 'false' : 'true'}
+              data-capability-panel={capability.id}
+            >
+              <div class="panel-copy">
+                <h3>{capability.title}</h3>
+                <p>{capability.description}</p>
+              </div>
+
+              <div class="diagram" aria-hidden="true">
+                <svg viewBox="0 0 716 282" role="presentation">
+                  <path class="diagram-grid" d="M20 36H696M20 148H696M20 260H696" />
+                  <path class="flow-shadow" d={capability.path} pathLength="1" />
+                  <path class="flow-line" d={capability.path} pathLength="1" />
+                  {capability.nodes.map((node, nodeIndex) => (
+                    <g class="flow-node" style={`--node-delay: ${280 + nodeIndex * 120}ms`}>
+                      <circle cx={node.x} cy={node.y} r="6" />
+                      <circle class="node-core" cx={node.x} cy={node.y} r="2.5" />
+                      <text x={node.x} y={node.y - 17} text-anchor="middle">{node.label}</text>
+                    </g>
+                  ))}
+                </svg>
+              </div>
+
+              <ul class="examples" aria-label="Примеры">
+                {capability.examples.map((example) => <li>{example}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
     </div>
   </Container>
 </section>
 
 <style>
-  .situations {
-    padding-block: var(--section-space);
+  .capabilities {
+    min-height: 100svh;
+    padding-block: clamp(5rem, 9vh, 8rem);
     background:
-      radial-gradient(circle at 88% 12%, rgb(213 79 45 / 0.08), transparent 26rem),
+      linear-gradient(rgb(29 28 25 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(29 28 25 / 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 84% 20%, rgb(213 79 45 / 0.09), transparent 27rem),
       var(--color-surface);
+    background-size: 7rem 7rem, 7rem 7rem, auto, auto;
   }
 
   .heading {
     display: grid;
-    grid-template-columns: minmax(11rem, 0.45fr) minmax(0, 1fr);
+    grid-template-columns: minmax(11rem, 0.42fr) minmax(0, 1fr);
     gap: var(--space-lg);
-    margin-bottom: var(--section-space);
+    margin-bottom: clamp(3rem, 7vh, 5.5rem);
   }
 
-  .section-label {
+  .section-label,
+  .workspace-meta {
     color: var(--color-text-muted);
-    font-size: 0.86rem;
-    font-weight: 650;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .messages {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--color-border);
-  }
-
-  blockquote {
-    position: relative;
-    isolation: isolate;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 13rem;
-    margin: 0;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border-right: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    font-size: clamp(1.15rem, 2vw, 1.5rem);
-    line-height: 1.45;
-    text-wrap: pretty;
-    overflow: hidden;
-    transition:
-      transform 0.45s var(--ease-out),
-      border-color 0.45s var(--ease-out);
-  }
-
-  blockquote::before {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    opacity: 0;
-    background: radial-gradient(
-      24rem circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-      rgb(255 255 255 / 0.72),
-      transparent 58%
-    );
-    content: '';
-    transition: opacity 0.35s ease;
-  }
-
-  blockquote:hover {
-    z-index: 1;
-    border-color: #aaa397;
-    transform: translateY(-0.35rem);
-  }
-
-  blockquote:hover::before {
-    opacity: 1;
-  }
-
-  .message-label {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 3rem;
-    color: var(--color-text-muted);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: 680;
     letter-spacing: 0.09em;
     text-transform: uppercase;
   }
 
-  .message-label span {
+  .heading-copy {
+    max-width: 54rem;
+  }
+
+  .heading-copy h2 {
+    max-width: 12ch;
+  }
+
+  .heading-copy p {
+    max-width: 42rem;
+    margin-top: 1.25rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  }
+
+  .showcase {
+    display: grid;
+    grid-template-columns: minmax(17rem, 0.7fr) minmax(0, 1.3fr);
+    min-height: 34rem;
+    border: 1px solid var(--color-border);
+    background: rgb(246 243 236 / 0.66);
+    box-shadow: 0 2.5rem 6rem rgb(42 37 29 / 0.07);
+  }
+
+  .capability-list {
+    border-right: 1px solid var(--color-border);
+  }
+
+  .capability-button {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr auto;
+    align-items: center;
+    width: 100%;
+    min-height: 6.75rem;
+    padding: 1.25rem 1.5rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: color 240ms ease, background-color 240ms ease;
+  }
+
+  .capability-button:last-child {
+    border-bottom: 0;
+  }
+
+  .capability-button > span:first-child {
+    color: var(--color-accent);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.73rem;
+    font-weight: 700;
+  }
+
+  .capability-button strong {
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    font-weight: 560;
+    letter-spacing: -0.025em;
+  }
+
+  .button-mark {
+    opacity: 0;
+    color: var(--color-accent);
+    font-size: 1.1rem;
+    transform: translate(-0.35rem, 0.35rem);
+    transition: opacity 240ms ease, transform 240ms ease;
+  }
+
+  .capability-button:hover,
+  .capability-button.is-active {
+    color: var(--color-text);
+    background: rgb(255 255 255 / 0.54);
+  }
+
+  .capability-button.is-active .button-mark {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .workspace {
+    position: relative;
+    min-width: 0;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    overflow: hidden;
+  }
+
+  .workspace::before {
+    position: absolute;
+    right: -5rem;
+    bottom: -7rem;
+    width: 18rem;
+    aspect-ratio: 1;
+    border: 1px solid rgb(29 28 25 / 0.1);
+    border-radius: 50%;
+    content: '';
+  }
+
+  .workspace-meta {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .workspace-meta span:last-child {
     color: var(--color-accent);
   }
 
-  blockquote:nth-child(odd) {
-    border-left: 1px solid var(--color-border);
+  .capability-panel {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-area: 1 / 1;
+    padding-top: clamp(2rem, 5vh, 3.5rem);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(0);
+  }
+
+  .panel-stack {
+    display: grid;
+    overflow: clip;
+  }
+
+  .capability-panel.is-active {
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .panel-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(15rem, 1.1fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: end;
+  }
+
+  .panel-copy h3 {
+    max-width: 18ch;
+    font-size: clamp(1.65rem, 3vw, 2.8rem);
+  }
+
+  .panel-copy p {
+    max-width: 37rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.35vw, 1.15rem);
+  }
+
+  .diagram {
+    margin-block: clamp(2rem, 5vh, 3.5rem);
+    align-self: center;
+  }
+
+  .diagram svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .diagram-grid,
+  .flow-shadow,
+  .flow-line {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .diagram-grid {
+    stroke: rgb(29 28 25 / 0.07);
+    stroke-width: 1;
+    stroke-dasharray: 3 9;
+  }
+
+  .flow-shadow {
+    stroke: rgb(29 28 25 / 0.15);
+    stroke-width: 1.25;
+  }
+
+  .flow-line {
+    stroke: var(--color-accent);
+    stroke-width: 1.8;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .is-active .flow-line {
+    animation: draw-flow 1.2s 120ms var(--ease-out) forwards;
+  }
+
+  .flow-node {
+    opacity: 0;
+    transform: translateY(8px);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .is-active .flow-node {
+    animation: node-enter 420ms var(--node-delay) var(--ease-out) forwards;
+  }
+
+  .flow-node circle {
+    fill: var(--color-surface);
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .flow-node .node-core {
+    fill: var(--color-accent);
+    stroke: none;
+  }
+
+  .flow-node text {
+    fill: var(--color-text-muted);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+  }
+
+  .examples {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: end;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .examples li {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    font-weight: 620;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  @keyframes draw-flow {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes node-enter {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 62rem) {
+    .showcase {
+      grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr);
+    }
+
+    .panel-copy {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
   }
 
   @media (max-width: 44rem) {
+    .capabilities {
+      min-height: auto;
+      padding-block: 4.5rem;
+      background-size: 4rem 4rem, 4rem 4rem, auto, auto;
+    }
+
     .heading,
-    .messages {
+    .showcase {
       grid-template-columns: 1fr;
     }
 
     .heading {
-      margin-bottom: var(--space-lg);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
     }
 
-    blockquote {
-      min-height: auto;
-      border-left: 1px solid var(--color-border);
+    .capability-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .capability-button {
+      grid-template-columns: 1.75rem 1fr;
+      min-height: 5.5rem;
+      padding: 1rem;
+      border-right: 1px solid var(--color-border);
+    }
+
+    .capability-button:nth-child(even) {
+      border-right: 0;
+    }
+
+    .capability-button:last-child {
+      grid-column: 1 / -1;
+      border-bottom: 0;
+      border-right: 0;
+    }
+
+    .button-mark {
+      display: none;
+    }
+
+    .workspace {
+      min-height: 29rem;
+      padding: 1.25rem;
+    }
+
+    .workspace-meta span:first-child {
+      display: none;
+    }
+
+    .workspace-meta {
+      justify-content: flex-end;
+    }
+
+    .capability-panel {
+      padding-top: 2rem;
+    }
+
+    .panel-copy h3 {
+      font-size: clamp(1.6rem, 8vw, 2.25rem);
+    }
+
+    .diagram {
+      margin-inline: -0.5rem;
+      margin-block: 2rem;
+    }
+
+    .flow-node text {
+      font-size: 9px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-active .flow-line,
+    .is-active .flow-node {
+      animation: none;
+    }
+
+    .flow-line {
+      stroke-dashoffset: 0;
+    }
+
+    .flow-node {
+      opacity: 1;
+      transform: none;
     }
   }
 </style>

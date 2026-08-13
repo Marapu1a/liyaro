@@ -15,12 +15,15 @@ enum ContactMethod {
 }
 
 model Inquiry {
-  id            String        @id @default(cuid())
-  message       String        @db.Text
-  contactMethod ContactMethod @map("contact_method")
-  contact       String
-  name          String?
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  id             String        @id @default(cuid())
+  message        String        @db.Text
+  contactMethod  ContactMethod @map("contact_method")
+  contact        String
+  name           String?
+  consentGivenAt DateTime      @default(now()) @map("consent_given_at") @db.Timestamptz(3)
+  consentVersion String        @map("consent_version")
+  consentFormId  String        @map("consent_form_id")
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
 
   @@map("inquiries")
 }

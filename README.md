@@ -99,6 +99,12 @@ Production-сборка frontend появляется в `apps/frontend/dist`, b
 npm start --workspace @liyaro/backend
 ```
 
+Перед production-сборкой задайте `SITE_URL` с окончательным HTTPS-доменом: он используется в
+canonical URL, `robots.txt` и автоматически создаваемом sitemap. После сборки доступны
+`/sitemap-index.xml` и `/sitemap-0.xml`. Коды подтверждения Яндекс Вебмастера и Google Search
+Console можно передать через необязательные `YANDEX_SITE_VERIFICATION` и
+`GOOGLE_SITE_VERIFICATION`; пустые значения не добавляют метатеги в HTML.
+
 ## Prisma
 
 Сгенерировать Prisma Client:

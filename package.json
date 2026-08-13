@@ -4,19 +4,22 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
+    "predev": "npm run build --workspace @liyaro/contracts",
     "dev": "concurrently --kill-others --names frontend,backend --prefix-colors cyan,magenta \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "npm run dev --workspace @liyaro/frontend",
     "dev:backend": "npm run dev --workspace @liyaro/backend",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build --workspace @liyaro/contracts && npm run build --workspace @liyaro/backend && npm run build --workspace @liyaro/frontend",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspace @liyaro/contracts && npm run typecheck --workspace @liyaro/backend && npm run typecheck --workspace @liyaro/frontend",
     "prisma:generate": "npm run prisma:generate --workspace @liyaro/backend",
     "prisma:migrate": "npm --workspace @liyaro/backend run prisma:migrate --",
+    "prisma:migrate:deploy": "npm run prisma:migrate:deploy --workspace @liyaro/backend",
     "prisma:studio": "npm run prisma:studio --workspace @liyaro/backend"
   },
   "engines": {

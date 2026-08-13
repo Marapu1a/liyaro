@@ -2,7 +2,7 @@ const MOTION_KEY = 'liyaro:motion:full';
 const BUILD_COMMAND = 'BUILD SOMETHING USEFUL';
 
 export function initBuildSequence() {
-  const root = document.querySelector<HTMLElement>('[data-build-intro]');
+  const root = document.querySelector<HTMLElement>('[data-build-intro-overlay]');
   const surface = document.querySelector<HTMLElement>('[data-build-surface]');
   const command = document.querySelector<HTMLElement>('[data-build-command]');
   const commandOutput = document.querySelector<HTMLElement>('[data-build-command-output]');
@@ -32,6 +32,16 @@ export function initBuildSequence() {
   let speedMultiplier = 1;
   let revealCleanup = 0;
   const activeAnimations = new Set<Animation>();
+
+  const resetScrollPosition = () => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0, 0);
+  };
 
   const wait = (duration: number, currentId: number) =>
     new Promise<void>((resolve) => {
@@ -96,6 +106,7 @@ export function initBuildSequence() {
     cancelElementAnimations();
     document.documentElement.classList.add('is-revealing-main');
     document.documentElement.classList.remove('build-intro-pending', 'is-building');
+    document.documentElement.style.removeProperty('overflow');
     document.body.style.removeProperty('overflow');
     flyingLogo.removeAttribute('style');
     surface.removeAttribute('style');
@@ -116,7 +127,7 @@ export function initBuildSequence() {
     const currentId = ++sequenceId;
     interactionCount = 0;
     speedMultiplier = 1;
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    resetScrollPosition();
     window.clearTimeout(revealCleanup);
     document.documentElement.classList.remove('is-revealing-main');
     resetHeader();
@@ -132,6 +143,7 @@ export function initBuildSequence() {
     root.classList.add('is-active');
     document.documentElement.classList.add('is-building');
     document.documentElement.classList.remove('build-intro-pending');
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
     await wait(180, currentId);
@@ -155,6 +167,7 @@ export function initBuildSequence() {
       { duration: 240, easing: 'ease-out', fill: 'forwards' },
     );
 
+    resetScrollPosition();
     const targetRect = logoTarget.getBoundingClientRect();
     const startScale = Math.min(5.4, Math.max(3.4, (window.innerWidth * 0.42) / targetRect.width));
     const startX = window.innerWidth / 2 - targetRect.left - (targetRect.width * startScale) / 2;

@@ -1,4 +1,4 @@
-<div class="build-intro" data-build-intro aria-label="Вступительная анимация Liyaro">
+<div class="build-intro" data-build-intro-overlay aria-label="Вступительная анимация Liyaro">
   <div class="build-intro__surface" data-build-surface></div>
 
   <p class="build-intro__command" data-build-command aria-live="polite">
@@ -53,11 +53,13 @@
   .build-intro__command {
     top: 50%;
     left: 50%;
+    width: min(calc(22ch + 2.92em), calc(100% - 2 * var(--page-padding)));
     margin: 0;
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: clamp(0.8rem, 1.2vw, 1rem);
     font-weight: 650;
     letter-spacing: 0.1em;
+    text-align: left;
     text-transform: uppercase;
     transform: translate(-50%, -50%);
     white-space: nowrap;
@@ -67,7 +69,7 @@
     display: inline-block;
     width: 0.5em;
     height: 2px;
-    margin-left: 0.22em;
+    margin-left: 0.04em;
     background: var(--color-accent);
     vertical-align: 0.2em;
     animation: build-cursor 0.72s steps(1, end) infinite;
@@ -127,11 +129,6 @@
   }
 
   @media (max-width: 32rem) {
-    .build-intro__command {
-      width: calc(100% - 2 * var(--page-padding));
-      text-align: center;
-    }
-
     .build-intro__hint {
       right: var(--page-padding);
       bottom: var(--page-padding);

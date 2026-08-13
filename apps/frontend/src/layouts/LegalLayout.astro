@@ -1,0 +1,169 @@
+---
+import { legalDocuments } from '@liyaro/contracts';
+
+import { siteConfig } from '../config/site';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  documentTitle: string;
+  version: string;
+}
+
+const { title, description, documentTitle, version } = Astro.props;
+---
+
+<BaseLayout {title} {description}>
+  <header class="legal-header">
+    <a class="legal-logo" href="/" aria-label="Вернуться на главную Liyaro">
+      <img src="/brand/liyaro-logo.svg" alt="Liyaro" width="630" height="470" />
+    </a>
+    <span>LEGAL / {version}</span>
+  </header>
+  <main class="legal-main">
+    <article>
+      <p class="eyebrow">ЮРИДИЧЕСКИЙ ДОКУМЕНТ</p>
+      <h1>{documentTitle}</h1>
+      <p class="document-meta">
+        Версия {version}. Действует с {legalDocuments.effectiveDate.split('-').reverse().join('.')}.
+      </p>
+      <slot />
+    </article>
+  </main>
+  <footer class="legal-footer">
+    <p>{siteConfig.legalName} · ИНН {siteConfig.taxId}</p>
+    <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+    <a href="/">На главную</a>
+  </footer>
+</BaseLayout>
+
+<style>
+  .legal-header,
+  .legal-footer,
+  .legal-main {
+    width: min(calc(100% - 2 * var(--page-padding)), 64rem);
+    margin-inline: auto;
+  }
+
+  .legal-header,
+  .legal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .legal-header {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-logo {
+    display: block;
+    width: 4.4rem;
+  }
+
+  .legal-logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .legal-main {
+    padding-block: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  article {
+    max-width: 50rem;
+  }
+
+  h1 {
+    max-width: 16ch;
+    margin-block: 1rem 1.5rem;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    overflow-wrap: anywhere;
+  }
+
+  .eyebrow,
+  .document-meta {
+    color: var(--color-text-muted);
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+  }
+
+  .document-meta {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  article :global(section) {
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  article :global(h2) {
+    margin-bottom: 1rem;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    letter-spacing: -0.025em;
+  }
+
+  article :global(p),
+  article :global(li) {
+    max-width: 46rem;
+    color: #393a36;
+  }
+
+  article :global(p + p),
+  article :global(ul + p),
+  article :global(p + ul) {
+    margin-top: 1rem;
+  }
+
+  article :global(ul) {
+    display: grid;
+    gap: 0.55rem;
+    padding-left: 1.25rem;
+  }
+
+  article :global(a),
+  .legal-footer a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .legal-footer {
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 38rem) {
+    .legal-header {
+      align-items: flex-start;
+    }
+
+    .legal-header span {
+      max-width: 50%;
+      text-align: right;
+    }
+
+    h1 {
+      max-width: 100%;
+      font-size: clamp(2.25rem, 11vw, 3.5rem);
+    }
+
+    .legal-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

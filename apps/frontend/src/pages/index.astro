@@ -4,7 +4,6 @@ import Header from '../components/layout/Header.astro';
 import BuildIntro from '../components/layout/BuildIntro.astro';
 import ContactForm from '../components/home/ContactForm.astro';
 import Hero from '../components/home/Hero.astro';
-import NextSteps from '../components/home/NextSteps.astro';
 import Situations from '../components/home/Situations.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -13,13 +12,12 @@ const description =
   'Расскажите о задаче своими словами. Поможем разобраться, что стоит сделать и нужна ли для этого разработка.';
 ---
 
-<BaseLayout {title} {description} canonicalPath="/">
+<BaseLayout {title} {description} canonicalPath="/" buildIntro>
   <BuildIntro />
   <Header />
   <main>
     <Hero />
     <Situations />
-    <NextSteps />
     <ContactForm />
   </main>
   <Footer />
