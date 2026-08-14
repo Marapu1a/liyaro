@@ -13,6 +13,7 @@
     "dev:frontend": "npm run dev --workspace @liyaro/frontend",
     "dev:backend": "npm run dev --workspace @liyaro/backend",
     "build": "npm run build --workspace @liyaro/contracts && npm run build --workspace @liyaro/backend && npm run build --workspace @liyaro/frontend",
+    "generate:og": "node scripts/generate-og-image.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -32,6 +33,7 @@
     "eslint": "9.39.5",
     "globals": "17.7.0",
     "prettier": "3.9.6",
+    "sharp": "^0.35.3",
     "typescript-eslint": "8.65.0"
   }
 }

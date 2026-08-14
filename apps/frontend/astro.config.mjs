@@ -7,5 +7,9 @@ dotenv.config({ path: new URL('../../.env', import.meta.url), quiet: true });
 export default defineConfig({
   output: 'static',
   site: process.env.SITE_URL ?? 'http://localhost:4321',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !['/privacy/', '/consent/'].some((path) => new URL(page).pathname === path),
+    }),
+  ],
 });

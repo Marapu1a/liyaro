@@ -20,6 +20,10 @@ liyaro.ru {
 	file_server
 }
 
-www.liyaro.ru {
+http://www.liyaro.ru {
+	redir https://liyaro.ru{uri} permanent
+}
+
+https://www.liyaro.ru {
 	redir https://liyaro.ru{uri} permanent
 }

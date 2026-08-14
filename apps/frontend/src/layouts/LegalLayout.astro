@@ -14,7 +14,7 @@ interface Props {
 const { title, description, documentTitle, version } = Astro.props;
 ---
 
-<BaseLayout {title} {description}>
+<BaseLayout {title} {description} noindex>
   <header class="legal-header">
     <a class="legal-logo" href="/" aria-label="Вернуться на главную Liyaro">
       <img src="/brand/liyaro-logo.svg" alt="Liyaro" width="630" height="470" />
