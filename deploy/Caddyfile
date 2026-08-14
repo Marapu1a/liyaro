@@ -19,3 +19,7 @@ liyaro.ru {
 	root * /srv
 	file_server
 }
+
+www.liyaro.ru {
+	redir https://liyaro.ru{uri} permanent
+}
