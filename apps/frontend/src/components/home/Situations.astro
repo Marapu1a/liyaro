@@ -479,26 +479,27 @@ const capabilities = [
 
     .capability-list {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
       border-right: 0;
       border-bottom: 1px solid var(--color-border);
     }
 
     .capability-button {
-      grid-template-columns: 1.75rem 1fr;
-      min-height: 5.5rem;
-      padding: 1rem;
-      border-right: 1px solid var(--color-border);
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-width: 0;
+      min-height: 4.75rem;
+      padding: 0.9rem 1rem;
+      border-right: 0;
     }
 
-    .capability-button:nth-child(even) {
-      border-right: 0;
+    .capability-button strong {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .capability-button:last-child {
-      grid-column: 1 / -1;
       border-bottom: 0;
-      border-right: 0;
     }
 
     .button-mark {
@@ -506,7 +507,7 @@ const capabilities = [
     }
 
     .workspace {
-      min-height: 29rem;
+      min-height: 0;
       padding: 1.25rem;
     }
 
@@ -516,10 +517,15 @@ const capabilities = [
 
     .workspace-meta {
       justify-content: flex-end;
+      padding-bottom: 0.9rem;
     }
 
     .capability-panel {
-      padding-top: 2rem;
+      padding-top: 1.5rem;
+    }
+
+    .panel-copy {
+      gap: 1rem;
     }
 
     .panel-copy h3 {
@@ -527,12 +533,22 @@ const capabilities = [
     }
 
     .diagram {
-      margin-inline: -0.5rem;
-      margin-block: 2rem;
+      margin-inline: -1rem;
+      margin-block: 1.5rem;
     }
 
     .flow-node text {
-      font-size: 9px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .examples {
+      gap: 0.5rem;
+    }
+
+    .examples li {
+      padding: 0.45rem 0.65rem;
+      font-size: 0.72rem;
     }
   }
 
