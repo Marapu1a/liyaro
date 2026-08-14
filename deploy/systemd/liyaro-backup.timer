@@ -1,0 +1,12 @@
+[Unit]
+Description=Run the Liyaro PostgreSQL backup every night
+
+[Timer]
+OnCalendar=*-*-* 02:15:00 Europe/Moscow
+Persistent=true
+RandomizedDelaySec=10m
+Unit=liyaro-backup.service
+
+[Install]
+WantedBy=timers.target
+

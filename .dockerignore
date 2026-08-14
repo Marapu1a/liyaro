@@ -1,0 +1,12 @@
+.git
+.gitignore
+.astro
+.env
+.env.*
+!.env.example
+!.env.production.example
+**/dist
+**/node_modules
+coverage
+*.log
+
