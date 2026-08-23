@@ -1,7 +1,6 @@
 ---
 import Footer from '../components/layout/Footer.astro';
 import Header from '../components/layout/Header.astro';
-import BuildIntro from '../components/layout/BuildIntro.astro';
 import ContactForm from '../components/home/ContactForm.astro';
 import Hero from '../components/home/Hero.astro';
 import Situations from '../components/home/Situations.astro';
@@ -9,11 +8,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const title = 'Liyaro — разработка сайтов, сервисов и внутренних систем';
 const description =
-  'Расскажите о задаче своими словами. Поможем разобраться, что стоит сделать и нужна ли для этого разработка.';
+  'Разрабатываем сайты и интернет-магазины, внутренние системы, автоматизацию, ботов и приложения. Помогаем разобраться в задаче и довести проект до запуска.';
 ---
 
-<BaseLayout {title} {description} canonicalPath="/" buildIntro>
-  <BuildIntro />
+<BaseLayout {title} {description} canonicalPath="/">
   <Header />
   <main>
     <Hero />

@@ -2,14 +2,14 @@
 import Container from '../ui/Container.astro';
 import AmbientField from './AmbientField.astro';
 
-const titleWords = ['Расскажите,', 'с', 'чем', 'пришли.'];
+const titleWords = ['Разработка', 'под', 'вашу', 'задачу.'];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <AmbientField />
   <Container>
     <div class="hero-content">
-      <h1 id="hero-title" aria-label="Расскажите, с чем пришли.">
+      <h1 id="hero-title" aria-label="Разработка под вашу задачу.">
         {titleWords.map((word, index) => <span aria-hidden="true" data-reveal style={`--reveal-delay: ${60 + index * 55}ms`}>{word}</span>)}
       </h1>
       <p class="lead" data-reveal style="--reveal-delay: 220ms">
