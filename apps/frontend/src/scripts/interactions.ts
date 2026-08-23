@@ -181,4 +181,31 @@ export function initInteractions() {
     });
   });
 
+  document.querySelectorAll<HTMLElement>('[data-capability-accordion]').forEach((accordion) => {
+    const buttons = Array.from(
+      accordion.querySelectorAll<HTMLButtonElement>('[data-capability-accordion-button]'),
+    );
+    const panels = Array.from(
+      accordion.querySelectorAll<HTMLElement>('[data-capability-accordion-panel]'),
+    );
+
+    const getPanel = (button: HTMLButtonElement) => {
+      const target = button.dataset.capabilityAccordionButton;
+      return panels.find((panel) => panel.dataset.capabilityAccordionPanel === target);
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const panel = getPanel(button);
+        if (!panel) return;
+
+        const shouldOpen = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(shouldOpen));
+        panel.classList.toggle('is-open', shouldOpen);
+        panel.setAttribute('aria-hidden', String(!shouldOpen));
+        panel.toggleAttribute('inert', !shouldOpen);
+      });
+    });
+  });
+
 }

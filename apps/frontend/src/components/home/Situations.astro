@@ -165,6 +165,72 @@ const capabilities = [
         </div>
       </div>
     </div>
+
+    <div
+      class="capability-accordion"
+      aria-label="Направления разработки"
+      data-capability-accordion
+      data-reveal
+      style="--reveal-delay: 90ms"
+    >
+      {capabilities.map((capability, index) => (
+        <div class="accordion-item">
+          <button
+            class="accordion-button"
+            type="button"
+            id={`capability-accordion-button-${capability.id}`}
+            aria-controls={`capability-accordion-panel-${capability.id}`}
+            aria-expanded={index === 0 ? 'true' : 'false'}
+            data-capability-accordion-button={capability.id}
+          >
+            <span class="accordion-number">{capability.number}</span>
+            <strong>{capability.name}</strong>
+            <span class="accordion-mark" aria-hidden="true">
+              <span class="accordion-mark-closed">+</span>
+              <span class="accordion-mark-open">−</span>
+            </span>
+          </button>
+
+          <div
+            class:list={['accordion-panel', { 'is-open': index === 0 }]}
+            id={`capability-accordion-panel-${capability.id}`}
+            role="region"
+            aria-labelledby={`capability-accordion-button-${capability.id}`}
+            aria-hidden={index === 0 ? 'false' : 'true'}
+            inert={index === 0 ? undefined : true}
+            data-capability-accordion-panel={capability.id}
+          >
+            <div class="accordion-panel-inner">
+              <article class="accordion-content">
+                <div class="panel-copy">
+                  <h3>{capability.title}</h3>
+                  <p>{capability.description}</p>
+                </div>
+
+                <div class="diagram" aria-hidden="true">
+                  <svg viewBox="0 0 716 282" role="presentation">
+                    <path class="diagram-grid" d="M20 36H696M20 148H696M20 260H696" />
+                    <path class="flow-shadow" d={capability.path} pathLength="1" />
+                    <path class="flow-line" d={capability.path} pathLength="1" />
+                    {capability.nodes.map((node, nodeIndex) => (
+                      <g class="flow-node" style={`--node-delay: ${280 + nodeIndex * 120}ms`}>
+                        <circle cx={node.x} cy={node.y} r="6" />
+                        <circle class="node-core" cx={node.x} cy={node.y} r="2.5" />
+                        <text x={node.x} y={node.y - 17} text-anchor="middle">{node.label}</text>
+                      </g>
+                    ))}
+                  </svg>
+                </div>
+
+                <ul class="examples" aria-label="Примеры">
+                  {capability.examples.map((example) => <li>{example}</li>)}
+                </ul>
+              </article>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   </Container>
 </section>
 
@@ -218,6 +284,10 @@ const capabilities = [
     border: 1px solid var(--color-border);
     background: rgb(246 243 236 / 0.66);
     box-shadow: 0 2.5rem 6rem rgb(42 37 29 / 0.07);
+  }
+
+  .capability-accordion {
+    display: none;
   }
 
   .capability-list {
@@ -386,7 +456,8 @@ const capabilities = [
     stroke-dashoffset: 1;
   }
 
-  .is-active .flow-line {
+  .is-active .flow-line,
+  .is-open .flow-line {
     animation: draw-flow 1.2s 120ms var(--ease-out) forwards;
   }
 
@@ -397,7 +468,8 @@ const capabilities = [
     transform-origin: center;
   }
 
-  .is-active .flow-node {
+  .is-active .flow-node,
+  .is-open .flow-node {
     animation: node-enter 420ms var(--node-delay) var(--ease-out) forwards;
   }
 
@@ -467,8 +539,7 @@ const capabilities = [
       background-size: 4rem 4rem, 4rem 4rem, auto, auto;
     }
 
-    .heading,
-    .showcase {
+    .heading {
       grid-template-columns: 1fr;
     }
 
@@ -477,51 +548,118 @@ const capabilities = [
       margin-bottom: 2.5rem;
     }
 
-    .capability-list {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
+    .showcase {
+      display: none;
+    }
+
+    .capability-accordion {
+      display: block;
       min-width: 0;
-      border-right: 0;
+      border: 1px solid var(--color-border);
+      background: rgb(246 243 236 / 0.72);
+      box-shadow: 0 2rem 4.5rem rgb(42 37 29 / 0.07);
+    }
+
+    .accordion-item:not(:last-child) {
       border-bottom: 1px solid var(--color-border);
     }
 
-    .capability-button {
-      grid-template-columns: 2rem minmax(0, 1fr);
+    .accordion-button {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr) 1.5rem;
+      gap: 0.75rem;
+      align-items: center;
+      width: 100%;
       min-width: 0;
       min-height: 4.75rem;
       padding: 0.9rem 1rem;
-      border-right: 0;
+      border: 0;
+      color: var(--color-text-muted);
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: color 200ms ease, background-color 200ms ease;
     }
 
-    .capability-button strong {
+    .accordion-button:hover,
+    .accordion-button[aria-expanded='true'] {
+      color: var(--color-text);
+      background: rgb(255 255 255 / 0.54);
+    }
+
+    .accordion-number {
+      color: var(--color-accent);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.73rem;
+      font-weight: 700;
+    }
+
+    .accordion-button strong {
       min-width: 0;
+      font-size: 1.05rem;
+      font-weight: 560;
+      letter-spacing: -0.025em;
       overflow-wrap: anywhere;
     }
 
-    .capability-button:last-child {
-      border-bottom: 0;
+    .accordion-mark {
+      display: grid;
+      place-items: center;
+      color: var(--color-accent);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 1.15rem;
+      line-height: 1;
     }
 
-    .button-mark {
+    .accordion-mark-open,
+    .accordion-button[aria-expanded='true'] .accordion-mark-closed {
       display: none;
     }
 
-    .workspace {
+    .accordion-button[aria-expanded='true'] .accordion-mark-open {
+      display: block;
+    }
+
+    .accordion-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        grid-template-rows 240ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 160ms ease-out,
+        visibility 0s linear 240ms;
+    }
+
+    .accordion-panel.is-open {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
+
+    .accordion-panel-inner {
       min-height: 0;
-      padding: 1.25rem;
+      overflow: hidden;
     }
 
-    .workspace-meta span:first-child {
-      display: none;
+    .accordion-content {
+      position: relative;
+      padding: 1.5rem 1.25rem 1.75rem;
+      border-top: 1px solid var(--color-border);
+      overflow: hidden;
     }
 
-    .workspace-meta {
-      justify-content: flex-end;
-      padding-bottom: 0.9rem;
-    }
-
-    .capability-panel {
-      padding-top: 1.5rem;
+    .accordion-content::before {
+      position: absolute;
+      right: -6rem;
+      bottom: -8rem;
+      width: 16rem;
+      aspect-ratio: 1;
+      border: 1px solid rgb(29 28 25 / 0.1);
+      border-radius: 50%;
+      content: '';
     }
 
     .panel-copy {
@@ -553,8 +691,19 @@ const capabilities = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .accordion-button,
+    .accordion-panel {
+      transition: none;
+    }
+
+    .accordion-panel:not(.is-open) {
+      visibility: hidden;
+    }
+
     .is-active .flow-line,
-    .is-active .flow-node {
+    .is-active .flow-node,
+    .is-open .flow-line,
+    .is-open .flow-node {
       animation: none;
     }
 
