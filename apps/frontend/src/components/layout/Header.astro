@@ -2,13 +2,15 @@
 import Container from '../ui/Container.astro';
 ---
 
-<header class="site-header" data-build-header>
+<header class="site-header">
   <Container>
     <div class="header-inner">
       <a class="logo" href="/" aria-label="Liyaro — главная">
-        <img src="/brand/liyaro-logo.svg" alt="Liyaro" width="630" height="470" data-build-logo-target />
+        <img src="/brand/liyaro-logo.svg" alt="Liyaro" width="630" height="470" />
       </a>
-      <p class="header-message">Независимая студия разработки</p>
+      <nav aria-label="Основная навигация">
+        <a href="/projects/" aria-current={Astro.url.pathname.startsWith('/projects') ? 'page' : undefined}>Проекты <span aria-hidden="true">↗</span></a>
+      </nav>
     </div>
   </Container>
 </header>
@@ -63,31 +65,31 @@ import Container from '../ui/Container.astro';
     height: auto;
   }
 
-  .header-message {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    margin: 0;
-    color: var(--color-text-muted);
-    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    font-size: 1.3rem;
-    font-weight: 650;
-    letter-spacing: 0.11em;
-    opacity: 0;
-    transform: translate3d(calc(100% + var(--page-padding)), -50%, 0);
-    text-transform: uppercase;
-    white-space: nowrap;
-    pointer-events: none;
-    transition:
-      opacity 0.4s ease 0.28s,
-      transform 0.62s var(--ease-out) 0.28s;
-    will-change: transform, opacity;
+  nav {
+    margin-left: auto;
   }
 
-  .site-header:hover .header-message {
-    opacity: 1;
-    transform: translate3d(0, -50%, 0);
-    transition-delay: 0s;
+  nav a {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.6rem 0;
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  nav span {
+    transition: transform 0.2s ease;
+  }
+
+  nav a:hover span {
+    transform: translate(2px, -2px);
   }
 
   @media (max-width: 30rem) {
@@ -97,10 +99,6 @@ import Container from '../ui/Container.astro';
 
     .logo {
       width: 4.25rem;
-    }
-
-    .header-message {
-      display: none;
     }
 
   }
