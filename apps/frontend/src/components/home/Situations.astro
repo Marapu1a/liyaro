@@ -116,7 +116,6 @@ const capabilities = [
           >
             <span>{capability.number}</span>
             <strong>{capability.name}</strong>
-            <span class="button-mark" aria-hidden="true">↗</span>
           </button>
         ))}
       </div>
@@ -328,13 +327,6 @@ const capabilities = [
     letter-spacing: -0.025em;
   }
 
-  .button-mark {
-    opacity: 0;
-    color: var(--color-accent);
-    font-size: 1.1rem;
-    transform: translate(-0.35rem, 0.35rem);
-    transition: opacity 240ms ease, transform 240ms ease;
-  }
 
   .capability-button:hover,
   .capability-button.is-active {
@@ -342,10 +334,6 @@ const capabilities = [
     background: rgb(255 255 255 / 0.54);
   }
 
-  .capability-button.is-active .button-mark {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
 
   .workspace {
     position: relative;

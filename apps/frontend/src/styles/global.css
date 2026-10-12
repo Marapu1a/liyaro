@@ -105,3 +105,10 @@ p {
     transition: none;
   }
 }
+
+/* Links use colour and focus outlines instead of decorative marks. */
+a {
+  text-decoration: none;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+a:hover { color: var(--color-accent); }

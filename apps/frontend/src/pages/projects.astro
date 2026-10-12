@@ -73,24 +73,20 @@ const projects = [
     id: 'qianqi',
     number: '04',
     name: 'Платформа QIANQI',
-    type: 'Платформа и два токена · web3',
-    lead: 'Общая система для токенов QIANQI и IGW: отдельные сайты и механики, единый хаб и поиск проектов через Telegram-бота.',
+    type: 'Платформа запуска и обслуживания токенов · web3',
+    lead: 'Общая инфраструктура для запуска токенов: сайты проектов, учёт операций, публичный хаб и поиск через Telegram-бота.',
     image: '/projects/qianqi-hub.png',
     imageHeight: 900,
-    imageAlt: 'Хаб QIANQI с двумя проектами: токенами QIANQI и IGW',
-    secondaryImage: '/projects/igw.png',
-    secondaryImageAlt: 'Главная страница токена IGW с красной иллюстрацией персонажа',
-    task: 'Из первого криптопроекта вырастить общую платформу, на которой можно запускать и обслуживать разные токены без отдельной системы для каждого.',
+    imageAlt: 'Публичный хаб платформы QIANQI с каталогом проектов',
+    task: 'Создать платформу для запуска и обслуживания токенов с общей инфраструктурой и отдельными данными и настройками каждого проекта.',
     work: [
-      'Создали общую инфраструктуру и перенесли на неё первый токен QIANQI; затем запустили IGW с собственным сайтом и оформлением.',
+      'Собрали общую инфраструктуру для подключения новых проектов с собственными сайтами, настройками и механиками.',
       'Реализовали учёт покупок, продаж, билетов и состояния розыгрышей для отдельных проектов.',
       'Собрали хаб с карточками токенов и подключили Telegram-бота: он находит проект по названию, тикеру или адресу контракта и отдаёт ссылки.',
     ],
-    result: 'QIANQI и IGW выпущены и представлены в общем хабе. У каждого свой сайт, а общая платформа обслуживает их данные и механики; бот помогает найти нужный проект.',
+    result: 'Платформа обслуживает запущенные проекты и позволяет подключать новые на общей инфраструктуре. Актуальный каталог доступен в хабе, ссылки на проекты — через Telegram-бота.',
     links: [
       { label: 'Хаб проектов', href: 'https://qianqi.site/' },
-      { label: 'Токен QIANQI', href: 'https://init.qianqi.site/' },
-      { label: 'Токен IGW', href: 'https://igw.qianqi.site/' },
       { label: 'Telegram-бот', href: 'https://t.me/qianqi_hub_bot' },
       { label: 'Код платформы', href: 'https://github.com/Marapu1a/crypto_launchpad' },
     ],
@@ -100,7 +96,7 @@ const projects = [
 
 <BaseLayout
   title="Проекты Liyaro — сайты, магазины и сложные системы"
-  description="Реализованные проекты Liyaro: каталог запчастей Makita, развитие Makita Land, платформа сертификации ПАП и криптоплатформа QIANQI с токенами QIANQI и IGW."
+  description="Реализованные проекты Liyaro: каталог запчастей Makita, развитие Makita Land, платформа сертификации ПАП и QIANQI — платформа запуска и обслуживания токенов."
   canonicalPath="/projects/"
 >
   <Header />
@@ -128,23 +124,17 @@ const projects = [
             <img src={project.image} alt={project.imageAlt} width="1440" height={project.imageHeight} loading="lazy" decoding="async" />
             <figcaption>Скриншот публичного сайта · октябрь 2026</figcaption>
           </figure>
-          {'secondaryImage' in project && (
-            <figure class="project-image project-image-secondary">
-              <img src={project.secondaryImage} alt={project.secondaryImageAlt} width="1440" height="900" loading="lazy" decoding="async" />
-              <figcaption>IGW · отдельный сайт токена на общей платформе · октябрь 2026</figcaption>
-            </figure>
-          )}
           <div class="project-details">
             <div class="detail"><h3>Задача</h3><p>{project.task}</p></div>
             <div class="detail"><h3>Что сделали</h3><ul>{project.work.map((item) => <li>{item}</li>)}</ul></div>
             <div class="detail result"><h3>Результат</h3><p>{project.result}</p></div>
           </div>
           <div class="project-links">
-            {project.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}<span aria-hidden="true">↗</span></a>)}
+            {project.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
           </div>
         </article>
       ))}
-      <div class="page-end"><p>Есть задача похожего масштаба?</p><a href="/#contact">Расскажите о ней <span aria-hidden="true">↗</span></a></div>
+      <div class="page-end"><p>Есть задача похожего масштаба?</p><a href="/services/">Услуги и ориентиры стоимости</a><a href="/#contact">Расскажите о ней</a></div>
     </Container>
   </main>
   <Footer />
@@ -166,7 +156,6 @@ const projects = [
   .project-heading h2 { max-width: 18ch; margin: 0; color: var(--color-text); }
   .project-heading p { max-width: 34rem; margin: 0; color: var(--color-text-muted); font-size: clamp(1.08rem, 1.5vw, 1.3rem); line-height: 1.5; }
   .project-image { margin: 0; }
-  .project-image-secondary { margin-top: 2rem; }
   .project-image img { display: block; width: 100%; height: auto; max-height: 47rem; object-fit: cover; object-position: top; border: 1px solid var(--color-border); }
   figcaption { margin-top: .8rem; font-size: .68rem; }
   .project-details { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: clamp(1.5rem, 3vw, 3rem); margin-top: clamp(2rem, 5vw, 4rem); }

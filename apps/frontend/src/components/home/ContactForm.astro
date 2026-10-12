@@ -139,7 +139,6 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
         <p>Контакт используем только для ответа на это сообщение.</p>
         <button type="submit" data-magnet data-magnet-strength="0.14">
           <span class="submit-label" data-submit-label>Отправить сообщение</span>
-          <span class="submit-arrow" aria-hidden="true">↗</span>
         </button>
       </div>
 
@@ -807,8 +806,8 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
   }
 
   .consent-field a {
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
+    color: var(--color-accent-soft);
+    text-decoration: none;
   }
 
   .consent-field input[aria-invalid='true'] {
@@ -816,10 +815,6 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
     outline-offset: 3px;
   }
 
-  .submit-arrow {
-    margin-left: 0.65rem;
-    color: var(--color-accent);
-  }
 
   button:disabled {
     cursor: wait;

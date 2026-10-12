@@ -1,0 +1,105 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Container from '../components/ui/Container.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  { id: 'landing', name: 'Лендинг', price: 'от 30 000 ₽', days: 'от 5 дней работы', lead: 'Представить продукт или услугу и собрать обращения.', items: ['Структура и адаптивный дизайн одной страницы', 'Вёрстка, форма заявки и подключение к почте', 'Метатеги, sitemap и публикация на вашем домене'], boundary: 'Для одной услуги с готовыми материалами. Фирменный стиль, съёмка и сложные интеграции — отдельно.', example: null },
+  { id: 'website', name: 'Сайт компании', price: 'от 60 000 ₽', days: 'от 10 дней работы', lead: 'Рассказать о компании, услугах и выполненных работах.', items: ['До пяти основных страниц с общей системой оформления', 'Адаптация для телефона, формы и навигация', 'Подготовка страниц к индексации и запуск'], boundary: 'Базовый объём — без личного кабинета и сложного каталога. Редактирование через CMS обсуждаем при оценке.', example: null },
+  { id: 'shop', name: 'Каталог и интернет-магазин', price: 'от 120 000 ₽', days: 'от 20 дней работы', lead: 'Поиск товаров, характеристики и оформление заказа.', items: ['Категории, карточки товаров, поиск и фильтры', 'Корзина, оформление заказа и работа с заявками', 'Загрузка согласованного набора данных и SEO-основа каталога'], boundary: 'Для каталога с готовыми данными. Онлайн-оплата, доставка, 1С и нестандартный подбор — по отдельной оценке.', example: { name: 'Каталог запчастей Makita', href: '/projects/#makita-remont' } },
+  { id: 'systems', name: 'Кабинеты и внутренние системы', price: 'от 180 000 ₽', days: 'от 30 дней работы', lead: 'Документы, роли и процессы в одном рабочем сервисе.', items: ['Описание основного процесса и прототип интерфейса', 'Авторизация, роли и рабочие экраны первой версии', 'Хранение данных, проверка сценариев и развёртывание'], boundary: 'Первая версия с одним основным процессом. Большую систему разбиваем на этапы.', example: { name: 'Платформа сертификации ПАП', href: '/projects/#reestrpap' } },
+  { id: 'automation', name: 'Автоматизация и интеграции', price: 'от 18 000 ₽', days: 'от 3 дней работы', lead: 'Перенос данных, обработка прайсов, обновление цен и остатков.', items: ['Разбор источника данных и правил обработки', 'Скрипт или интеграция для одного согласованного сценария', 'Проверки результата и инструкция по запуску'], boundary: 'Один источник данных. Несколько поставщиков, запуск по расписанию и интерфейс оператора — отдельно.', example: { name: 'Обновление каталога Makita Land', href: '/projects/#makita-land' } },
+  { id: 'support', name: 'Доработка проектов', price: '1 800 ₽ / час', days: 'объём после разбора задачи', lead: 'Исправить ошибки и добавить нужные функции.', items: ['Изучение нужной части проекта и оценка изменений', 'Исправление или доработка согласованного участка', 'Проверка затронутых сценариев и передача результата'], boundary: 'До начала согласуем лимит часов. Если причина проблемы неизвестна, сначала отдельно оцениваем диагностику.', example: { name: 'Развитие магазина Makita Land', href: '/projects/#makita-land' } },
+];
+---
+
+<BaseLayout title="Разработка сайтов и автоматизация — услуги и цены Liyaro" description="Лендинги от 30 000 ₽, сайты компаний от 60 000 ₽, интернет-магазины от 120 000 ₽. Разработка личных кабинетов, автоматизация и доработка проектов. Состав работ и примеры." canonicalPath="/services/">
+  <Header />
+  <main>
+    <Container>
+      <section class="intro" aria-labelledby="services-title">
+        <p class="eyebrow">Услуги / Состав работ и стоимость</p>
+        <h1 id="services-title">От задачи<br />до работающего сайта.</h1>
+        <div class="intro-bottom">
+          <p class="lead">Сайты, магазины, внутренние системы и автоматизация. Что входит в работу и сколько стоит первая версия.</p>
+          <a class="text-link" href="/#contact">Обсудить задачу</a>
+        </div>
+        <nav class="service-index" aria-label="Выбрать услугу">
+          {services.map((service, index) => <a href={`#${service.id}`}><span>0{index + 1}</span>{service.name}</a>)}
+        </nav>
+      </section>
+
+      <section class="services" aria-label="Услуги и цены">
+        {services.map((service, index) => (
+          <article class="service" id={service.id} aria-labelledby={`${service.id}-title`}>
+            <div class="service-heading"><p class="eyebrow">0{index + 1} / Разработка</p><h2 id={`${service.id}-title`}>{service.name}</h2><p class="service-lead">{service.lead}</p></div>
+            <div class="service-body"><div class="price">{service.price}</div><p class="days">{service.days}</p><h3>Что входит</h3><ul>{service.items.map(item => <li>{item}</li>)}</ul><p class="boundary">{service.boundary}</p>{service.example && <a class="example" href={service.example.href}>{service.example.name}</a>}</div>
+          </article>
+        ))}
+      </section>
+
+      <section class="estimate" aria-labelledby="estimate-title">
+        <div><p class="eyebrow">Как считаем</p><h2 id="estimate-title">Понятный объём.<br />Согласованный бюджет.</h2></div>
+        <div class="estimate-copy">
+          <dl class="rates"><div><dt>Проектная работа</dt><dd>6 000 ₽ <span>/ день</span></dd></div><div><dt>Небольшие доработки</dt><dd>1 800 ₽ <span>/ час</span></dd></div></dl>
+          <p>До старта согласуем объём, формат оплаты и стоимость этапа.</p>
+          <p>Дни в карточках — объём работы. Дату запуска определяем с учётом загрузки, материалов и согласований.</p>
+          <p class="boundary">Домен, хостинг и платные сервисы — отдельно. Дополнительные задачи оцениваем до начала работы.</p>
+        </div>
+      </section>
+
+      <section class="process" aria-labelledby="process-title"><p class="eyebrow">От первого сообщения до запуска</p><h2 id="process-title">Можно без готового ТЗ.</h2><div class="steps"><div><span>01</span><h3>Разбираемся в задаче</h3><p>Обсуждаем задачу, смотрим примеры и текущий проект.</p></div><div><span>02</span><h3>Определяем первую версию</h3><p>Согласуем функции, материалы, бюджет и этапы.</p></div><div><span>03</span><h3>Показываем и запускаем</h3><p>Показываем результат, вносим правки, проверяем и публикуем.</p></div></div></section>
+
+      <section class="questions" aria-labelledby="questions-title"><h2 id="questions-title">До начала работы</h2><details><summary>Что нужно для оценки?</summary><p>Краткое описание задачи, ссылка на текущий сайт, если он есть, и желаемый результат. Если знаете бюджет или дату запуска, напишите и их: это поможет выбрать реалистичный объём.</p></details><details><summary>Что входит в подготовку сайта к поиску?</summary><p>Понятные адреса страниц, заголовки и описания, canonical, sitemap, robots.txt и ссылки между страницами. Для каталога отдельно продумываем структуру категорий и карточек. Поисковые позиции и поток заявок не входят в обещания по разработке.</p></details><details><summary>Можно доработать сайт, который делали другие?</summary><p>Да. Сначала изучим нужный участок кода и ограничения платформы, затем предложим объём изменений. Если потребуется диагностика, согласуем её стоимость до начала.</p></details><details><summary>А если нужен бот или нестандартный сервис?</summary><p>Такие задачи тоже обсуждаем. Например, в платформе QIANQI мы связали сайты проектов, общие данные и Telegram-бота. Стоимость зависит от сценариев и интеграций — <a href="/projects/#qianqi">посмотрите пример платформы</a> и расскажите о своей задаче.</p></details></section>
+      <section class="closing"><p class="eyebrow">Начнём с разговора</p><h2>Что хотите сделать?</h2><p>Расскажите о задаче — обсудим объём и стоимость.</p><a class="text-link" href="/#contact">Рассказать о проекте</a></section>
+    </Container>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .intro { padding-block: clamp(3.5rem, 8vw, 7rem) 3rem; }
+  .eyebrow { margin-bottom: 1.5rem; color: var(--color-text-muted); font: 0.78rem/1.5 ui-monospace, monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+  h1 { max-width: 65rem; }
+  .intro-bottom { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-top: 2.5rem; }
+  .lead { max-width: 45rem; font-size: clamp(1.15rem, 2vw, 1.5rem); }
+  .text-link { display: inline-flex; gap: 1rem; align-items: center; flex-shrink: 0; font-weight: 550; padding: 0.8rem 1.15rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .text-link:hover { background: var(--color-surface); }
+  .service-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 1.5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border); }
+  .service-index a { display: flex; align-items: baseline; gap: 0.65rem; padding: 0.65rem 0; font-size: 0.88rem; text-decoration: none; }
+  .service-index span { flex-shrink: 0; color: var(--color-accent); font-family: monospace; }
+  .service { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 7vw, 7rem); padding-block: clamp(2.5rem, 6vw, 5rem); border-top: 1px solid var(--color-border); }
+  .service h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); max-width: 31rem; }
+  .service-lead { margin-top: 1.5rem; max-width: 32rem; color: var(--color-text-muted); }
+  .price { font-size: clamp(1.8rem, 3vw, 2.7rem); letter-spacing: -0.045em; line-height: 1.15; white-space: nowrap; }
+  .days { margin-top: 0.5rem; color: var(--color-text-muted); font-size: 0.9rem; }
+  .service h3 { margin-top: 2rem; font-size: 1rem; letter-spacing: 0; }
+  ul { padding-left: 1.1rem; margin-block: 1rem 1.25rem; }
+  li { margin-top: 0.5rem; }
+  li::marker { color: var(--color-accent); }
+  .boundary { color: var(--color-text-muted); font-size: 0.92rem; }
+  .example { display: inline-block; margin-top: 1.5rem; color: #a53b20; font-weight: 550; }
+  .estimate { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; padding: clamp(1.5rem, 4vw, 3rem); background: var(--color-surface); margin-block: 1rem 5rem; }
+  .estimate h2 { font-size: clamp(2rem, 3vw, 3rem); }
+  .rates { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0 0 1.5rem; }
+  .rates dt { font-size: 0.85rem; color: var(--color-text-muted); }
+  .rates dd { margin: 0.5rem 0 0; font-size: clamp(1.2rem, 2vw, 1.65rem); white-space: nowrap; }
+  .rates dd span { font-size: 0.9rem; color: var(--color-text-muted); }
+  .questions a { color: #a53b20; font-weight: 550; }
+  .estimate-copy p + p { margin-top: 1rem; }
+  .process, .questions, .closing { margin-block: 5rem; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; margin-top: 2.5rem; }
+  .steps span { color: var(--color-accent); font-family: monospace; }
+  .steps h3 { margin-block: 1rem; }
+  .steps p { color: var(--color-text-muted); }
+  .questions h2 { margin-bottom: 2rem; }
+  details { border-top: 1px solid var(--color-border); padding-block: 1.25rem; }
+  details:last-child { border-bottom: 1px solid var(--color-border); }
+  summary { cursor: pointer; font-size: 1.15rem; font-weight: 550; }
+  details p { max-width: 50rem; margin-top: 1rem; color: var(--color-text-muted); }
+  .closing { border-top: 1px solid var(--color-border); padding-top: 3rem; }
+  .closing p:not(.eyebrow) { max-width: 39rem; margin-block: 1.5rem; }
+  @media (max-width: 48rem) { .intro-bottom { align-items: start; flex-direction: column; } .service, .estimate, .steps { grid-template-columns: 1fr; gap: 2rem; } .service-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1rem; } .process, .questions, .closing { margin-block: 3.5rem; } }
+  @media (max-width: 30rem) { .service-index { grid-template-columns: 1fr; } .rates { grid-template-columns: 1fr; } }
+</style>
